@@ -252,10 +252,16 @@ details summary{cursor:pointer;color:var(--muted);font-weight:700;font-size:14px
 .stack{display:flex;flex-direction:column;gap:12px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 :root{padding-top:0!important;padding-bottom:0!important}
-#app{position:fixed;inset:0;height:auto;max-width:620px;margin:0 auto;padding-top:env(safe-area-inset-top,0px)}
+#app{position:fixed;top:0;left:0;right:0;bottom:auto;height:var(--app-h,100%);max-width:620px;margin:0 auto;padding-top:env(safe-area-inset-top,0px)}
+.sheet{bottom:auto!important;height:var(--app-h,100%)}
 .tabbar{padding-bottom:max(8px, env(safe-area-inset-bottom,0px))}
 body::after{display:none}
 </style>
+<script>
+/* iOS home-screen apps report a viewport shorter than the screen; size the app to the real screen */
+(function(){function fit(){var h=window.innerHeight;if(navigator.standalone){var p=window.matchMedia("(orientation: portrait)").matches;h=Math.max(h,p?screen.height:screen.width);}document.documentElement.style.setProperty("--app-h",h+"px");}
+fit();addEventListener("resize",fit);addEventListener("orientationchange",function(){setTimeout(fit,300);});})();
+</script>
 </head>
 <body>
 <div id="app">
