@@ -1925,7 +1925,7 @@ Return ONLY JSON {"foods":[{"i":number,${MICRO_SPEC}}]}`, {modelTier:"default"})
 }
 
 /* ---------- Repair saved recipes/meals whose serving sizes or nutrition went missing ---------- */
-const APP_VERSION = "2026.10.21-18";
+const APP_VERSION = "2026.10.21-19";
 function repairFoods(){
   let fixed = 0;
   for (const f of Object.values(S.foods)){
@@ -1981,20 +1981,47 @@ function applyColors(){
   r.setProperty("--bg", `rgb(${base.join(",")})`);
   r.setProperty("--blur", Math.round(16 * (1 - Math.min(85, LOOK.glass||0)/85) + 2) + "px"); // clearer photo as boxes get more see-through
   r.setProperty("--card", rgba(P.card, al)); r.setProperty("--card-hi", rgba(P.cardHi, al + .06)); r.setProperty("--panel", rgba(P.panel, al + .04));
+  setThemeColor(P.panel, Math.min(1, al + .04), base);
   r.setProperty("--field", rgba(P.field, Math.max(al, .55))); r.setProperty("--track", rgba(P.track, Math.max(al, .65))); r.setProperty("--line", `rgb(${P.line.join(",")})`);
 }
-let bgUrl = null;
+let bgUrl = null, bgTop = null;
+/* Average color of the strip of the photo that sits under the phone's status bar (photo is shown "cover", centered) */
+function sampleTop(img){
+  try {
+    const W = innerWidth || 390, H = innerHeight || 844, iw = img.naturalWidth, ih = img.naturalHeight;
+    const sc = Math.max(W/iw, H/ih), vw = W/sc, vh = H/sc, sx = (iw - vw)/2, sy = (ih - vh)/2;
+    const c = document.createElement("canvas"); c.width = 24; c.height = 4;
+    const x = c.getContext("2d", {willReadFrequently:true}); x.drawImage(img, sx, sy, vw, vh*0.08, 0, 0, 24, 4);
+    const d = x.getImageData(0, 0, 24, 4).data; let r = 0, g = 0, b = 0;
+    for (let i = 0; i < d.length; i += 4){ r += d[i]; g += d[i+1]; b += d[i+2]; }
+    const n = d.length/4; return [r/n, g/n, b/n];
+  } catch(e){ return null; }
+}
+/* The installed iPhone app's status bar is painted by iOS from theme-color; match it to what sits right below it */
+function setThemeColor(panelRGB, alpha, base){
+  let c = panelRGB;
+  if (document.documentElement.classList.contains("has-bg") && bgTop){
+    const dim = (LOOK.dim||0)/100, under = bgTop.map((v,i) => v*(1-dim) + base[i]*dim);
+    c = panelRGB.map((v,i) => v*alpha + under[i]*(1-alpha));
+  }
+  const hex = "#" + c.map(v => Math.round(Math.max(0, Math.min(255, v))).toString(16).padStart(2, "0")).join("");
+  let m = document.querySelector('meta[name="theme-color"]');
+  if (!m){ m = document.createElement("meta"); m.name = "theme-color"; document.head.appendChild(m); }
+  m.setAttribute("content", hex);
+}
 async function showBg(blob){
   const host = $("#bgHost"), dim = $("#bgDim");
   const old = [...host.querySelectorAll(".bg-img")];
   if (!blob){
-    document.documentElement.classList.remove("has-bg"); applyColors();
+    document.documentElement.classList.remove("has-bg"); bgTop = null; applyColors();
     old.forEach(o => o.classList.remove("on"));
     setTimeout(() => { old.forEach(o => o.remove()); if (bgUrl){ URL.revokeObjectURL(bgUrl); bgUrl = null; } }, 600);
     renderLook(); return;
   }
   const url = URL.createObjectURL(blob);
-  try { const im = new Image(); im.src = url; await im.decode(); } catch(e){ URL.revokeObjectURL(url); throw e; }
+  let im;
+  try { im = new Image(); im.src = url; await im.decode(); } catch(e){ URL.revokeObjectURL(url); throw e; }
+  bgTop = sampleTop(im);
   const el = document.createElement("div"); el.className = "bg-img"; el.style.backgroundImage = `url("${url}")`;
   host.insertBefore(el, dim);
   document.documentElement.classList.add("has-bg"); applyColors();
