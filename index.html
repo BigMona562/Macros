@@ -631,26 +631,42 @@ const AI = {
   key:"", fast:"claude-haiku-5-5", vision:"claude-sonnet-5-5",
   load(){ try { const o = JSON.parse(localStorage.getItem("macro-diary-ai")||"{}"); this.key = o.key||""; this.fast = o.fast||this.fast; this.vision = o.vision||this.vision; } catch(e){} },
   persist(){ try { localStorage.setItem("macro-diary-ai", JSON.stringify({key:this.key, fast:this.fast, vision:this.vision})); } catch(e){} },
+  web:true,
   async json(prompt, opts={}){
     const imgs = opts.images ? [].concat(opts.images) : [];
     const content = [];
     for (const b of imgs) content.push({type:"image", source:{type:"base64", media_type:"image/jpeg", data:await blobB64(b)}});
     content.push({type:"text", text:prompt+"\nRespond with the JSON only, no other text."});
-    let r;
-    try {
-      r = await fetch("https://api.anthropic.com/v1/messages", {method:"POST", signal:opts.signal,
-        headers:{"content-type":"application/json","x-api-key":this.key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
-        body:JSON.stringify({model: imgs.length ? this.vision : this.fast, max_tokens:4000, messages:[{role:"user", content}]})});
-    } catch(e){ if (e && e.name === "AbortError") throw e; throw {code:"network"}; }
-    if (!r.ok){
-      let m = ""; try { const j = await r.json(); m = (j.error && j.error.message) || ""; } catch(e){}
-      throw {code: r.status===401 ? "bad_key" : r.status===429 ? "rate_limited" : /credit/i.test(m) ? "no_credit" : (r.status===404 || /model/i.test(m)) ? "bad_model" : "error", message:m};
+    const messages = [{role:"user", content}], blocks = [];
+    const body = {model: imgs.length ? this.vision : this.fast, max_tokens:4000, messages};
+    if (opts.web) body.tools = [{type:"web_search_20250305", name:"web_search", max_uses:4}];
+    for (let round = 0; round < 4; round++){
+      let r;
+      try {
+        r = await fetch("https://api.anthropic.com/v1/messages", {method:"POST", signal:opts.signal,
+          headers:{"content-type":"application/json","x-api-key":this.key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
+          body:JSON.stringify(body)});
+      } catch(e){ if (e && e.name === "AbortError") throw e; throw {code:"network"}; }
+      if (!r.ok){
+        let m = ""; try { const j = await r.json(); m = (j.error && j.error.message) || ""; } catch(e){}
+        throw {code: r.status===401 ? "bad_key" : r.status===429 ? "rate_limited" : /credit/i.test(m) ? "no_credit" : (opts.web && /web.?search/i.test(m)) ? "no_web" : (r.status===404 || /model/i.test(m)) ? "bad_model" : "error", message:m};
+      }
+      const j = await r.json();
+      blocks.push(...(j.content||[]));
+      if (j.stop_reason === "pause_turn"){ messages.push({role:"assistant", content:j.content}); continue; }
+      break;
     }
-    const j = await r.json();
-    const text = (j.content||[]).filter(c => c.type === "text").map(c => c.text).join("");
+    const text = blocks.filter(c => c.type === "text").map(c => c.text).join("");
     const i = text.indexOf("{"), k = text.lastIndexOf("}");
-    if (i < 0 || k < i) throw {code:"invalid_json"};
-    try { return JSON.parse(text.slice(i, k+1)); } catch(e){ throw {code:"invalid_json"}; }
+    if (i < 0 || k < i) throw {code:"invalid_json", text};
+    let out; try { out = JSON.parse(text.slice(i, k+1)); } catch(e){ throw {code:"invalid_json", text}; }
+    if (opts.web && out && typeof out === "object"){
+      const urls = [];
+      blocks.forEach(c => (c.citations||[]).forEach(x => x.url && urls.push(x.url)));
+      blocks.filter(c => c.type === "web_search_tool_result" && Array.isArray(c.content)).forEach(c => c.content.forEach(x => x.url && urls.push(x.url)));
+      out.__sources = [...new Set(urls)];
+    }
+    return out;
   }
 };
 function blobB64(b){ return new Promise((res, rej) => { const fr = new FileReader(); fr.onload = () => res(String(fr.result).split(",")[1]); fr.onerror = rej; fr.readAsDataURL(b); }); }
@@ -661,6 +677,7 @@ function aiErr(e, fallback){
   if (c === "rate_limited") return "Too many requests. Try again in a moment.";
   if (c === "network") return "Couldn't reach Claude. Check your connection.";
   if (c === "bad_model") return "That model name wasn't accepted. Check Models in More.";
+  if (c === "no_web") return "Web search is turned off for your Anthropic account (Console › Settings › Capabilities).";
   return fallback;
 }
 function applyAI(){ S.sample = AI.key ? AI : null; S.imgOK = !!AI.key; S.imgMax = 8; }
@@ -993,20 +1010,35 @@ function openSearch(meal, link, onIng){
   renderResults();
   setTimeout(() => { if (!link) q.focus({preventScroll:true}); }, 250);
 }
+const normTxt = x => String(x||"").toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, " ").trim();
+const stem = t => t.length > 3 && t.endsWith("s") && !t.endsWith("ss") ? t.slice(0, -1) : t;
 function searchFoods(q){
-  const toks = q.toLowerCase().split(/\s+/).filter(Boolean);
+  const toks = normTxt(q).split(" ").filter(Boolean).map(stem);
   if (!toks.length) return [];
   const pool = [...Object.values(S.foods), ...BI];
   const seen = new Set();
   return pool.map(f => {
     if (seen.has(f.id)) return null; seen.add(f.id);
-    const hay = (f.name+" "+(f.brand||"")).toLowerCase();
-    if (!toks.every(t => hay.includes(t))) return null;
-    let score = 0; if (hay.startsWith(toks[0])) score += 3; if (f.src !== "builtin") score += 2; if (S.recent.includes(f.id)) score += 2;
+    const hay = normTxt(f.name+" "+(f.brand||"")), joined = hay.replace(/ /g, "");
+    const hit = toks.filter(t => hay.includes(t) || joined.includes(t)).length;
+    if (hit < Math.max(1, Math.ceil(toks.length*0.6))) return null; // word order and partial names are fine
+    let score = hit*3; if (hit === toks.length) score += 4; if (hay.startsWith(toks[0])) score += 2; if (f.src !== "builtin") score += 2; if (S.recent.includes(f.id)) score += 2;
     score -= hay.length/200;
     return {f, score};
   }).filter(Boolean).sort((a,b) => b.score-a.score).slice(0,40).map(x => x.f);
 }
+/* Ask Claude for JSON; if the reply isn't clean JSON, pull it out or ask once more */
+async function askJSON(prompt, opts){
+  try { return await S.sample.json(prompt, opts); }
+  catch(e){
+    if (!e || e.code !== "invalid_json") throw e;
+    const t = String(e.text||""), i = t.indexOf("{"), k = t.lastIndexOf("}");
+    if (i >= 0 && k > i){ try { return JSON.parse(t.slice(i, k+1)); } catch(err){} }
+    return await S.sample.json(prompt + "\n\nIMPORTANT: reply with ONLY the JSON object described above. No other words.", opts);
+  }
+}
+const UNDERSTAND = `The search was typed quickly on a phone: it may be misspelled, abbreviated, use nicknames or slang, or have the words in any order (for example "grilled chicken fila nugget" and "chick fil a nuggets grilled" both mean Chick-fil-A Grilled Nuggets; "mcd" means McDonald's). First work out what food the person most likely means, then answer for that.`;
+const errText = (e, base) => aiErr(e, base + (e && e.message ? ` (${String(e.message).slice(0,90)})` : "") + ". Try again.");
 function foodRowHTML(f, act="pick", extra=""){
   return `<button class="food-row" data-act="${act}" data-id="${esc(f.id)}"><div class="t"><b>${esc(f.name)}</b><small class="num">${f.brand?esc(f.brand)+" · ":""}${esc(portionLine(f))}</small></div>${extra}</button>`;
 }
@@ -1022,9 +1054,9 @@ function renderResults(){
     if (!rec.length) html = `<p class="fineprint" style="margin:0">Type a food, like “chicken breast” or “greek yogurt”, or tap the barcode button to scan a package.</p>` + html;
   } else {
     const res = searchFoods(q);
-    if (res.length) html += `<div>${res.map(f => foodRowHTML(f, "pick", f.src==="claude"?`<span class="tag">Estimate</span>`:"")).join("")}</div>`;
+    if (res.length) html += `<div>${res.map(f => foodRowHTML(f, "pick", f.src==="claude"?`<span class="tag">Estimate</span>`:f.src==="web"?`<span class="tag">${esc(hostOf(f.source)||"Web")}</span>`:"")).join("")}</div>`;
     if (searchCtx.claudeResults.length){
-      html += `<div class="sec-label">From Claude</div><div>${searchCtx.claudeResults.map((f,i) => foodRowHTML(f, "pickClaude", `<span class="tag">Estimate</span>`).replace(`data-id="${esc(f.id)}"`, `data-i="${i}"`)).join("")}</div>`;
+      html += `<div class="sec-label">${S.sample && S.sample.web ? "From the web" : "From Claude"}</div><div>${searchCtx.claudeResults.map((f,i) => foodRowHTML(f, "pickClaude", f.src === "web" ? `<span class="tag">${esc(hostOf(f.source) || "Web")}</span>` : `<span class="tag">Estimate</span>`).replace(`data-id="${esc(f.id)}"`, `data-i="${i}"`)).join("")}</div>`;
     }
     if (searchCtx.offBusy) html += `<div class="sec-label">Packaged products</div><div class="spin"></div>`;
     else if (searchCtx.offResults){
@@ -1036,7 +1068,7 @@ function renderResults(){
     }
     if (S.sample){
       html += `<button class="ask" data-act="askClaude"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--carbs)" stroke-width="2" stroke-linecap="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg>
-        <div><b>${res.length ? "Not it? Look up" : "Look up"} “${esc(q)}”</b><small>Claude finds the macros for any food, dish or restaurant item</small></div></button>`;
+        <div><b>${S.sample.web ? (res.length ? "Not it? Search the web for" : "Search the web for") : (res.length ? "Not it? Look up" : "Look up")} “${esc(q)}”</b><small>${S.sample.web ? "Official nutrition from restaurant and brand sites" : "Claude finds the macros for any food, dish or restaurant item"}</small></div></button>`;
     } else if (!res.length){
       html += `<p class="fineprint" style="margin:0">Add an API key in More to look up any food or restaurant meal with Claude.</p>`;
     }
@@ -1049,14 +1081,16 @@ async function askClaude(){
   const q = searchCtx.q.trim(); if (!q || !S.sample) return;
   const box = topSheet().querySelector("#results");
   const btn = box.querySelector('[data-act="askClaude"]');
-  if (btn) btn.outerHTML = `<div class="ask"><div class="spin" style="margin:0;width:28px;height:28px;border-width:3px"></div><div><b>Looking up “${esc(q)}”…</b><small>Getting macros and serving sizes</small></div></div>`;
+  if (btn) btn.outerHTML = `<div class="ask"><div class="spin" style="margin:0;width:28px;height:28px;border-width:3px"></div><div><b>${S.sample.web ? "Searching the web for" : "Looking up"} “${esc(q)}”…</b><small>${S.sample.web ? "Finding the official nutrition facts" : "Getting macros and serving sizes"}</small></div></div>`;
   askCtl && askCtl.abort(); askCtl = new AbortController();
+  if (S.sample.web){ await webLookup(q, box); return; }
   const prompt = `You are a nutrition database. The user searched a food log for: "${q}".
+${UNDERSTAND}
 Return the 1 to 3 most likely matching foods (include the exact branded or restaurant item if one is clearly meant). Use USDA FoodData Central or the brand's published nutrition facts where you know them.
 Return ONLY JSON: {"foods":[{"name":string,"brand":string or "","kcal":number,"protein":number,"carbs":number,"fiber":number,"fat":number,${MICRO_SPEC},"liquid":boolean,"density":number,"portions":[{"label":string,"grams":number,"qty":number}]}]}
 Rules: kcal/protein/carbs(total)/fiber/fat and every micro are PER 100 GRAMS. "density" is grams per ml (use 1 when unsure, only matters if liquid). "portions" lists 1-3 common serving units with the grams in ONE unit; label is the unit noun without a leading number (e.g. "cup", "large egg", "sandwich", "slice", "bottle (20 fl oz)"), qty is the usual amount eaten of that unit. If the search is not a food, return {"foods":[]}.`;
   try {
-    const out = await S.sample.json(prompt, {modelTier:"default", signal:askCtl.signal});
+    const out = await askJSON(prompt, {modelTier:"default", signal:askCtl.signal});
     const arr = (out && Array.isArray(out.foods)) ? out.foods : [];
     searchCtx.claudeResults = arr.filter(x => x && x.name && isFinite(+x.kcal)).slice(0,3).map(x => ({
       id:"c:"+uid(), name:String(x.name).slice(0,80), brand:String(x.brand||"").slice(0,60), src:"claude",
@@ -1067,7 +1101,38 @@ Rules: kcal/protein/carbs(total)/fiber/fat and every micro are PER 100 GRAMS. "d
     if (!searchCtx.claudeResults.length) toast("Claude couldn't match that to a food.");
   } catch(e){
     if (e && e.name === "AbortError") return;
-    toast(aiErr(e, "Lookup didn't finish. Try again."));
+    toast(errText(e, "The lookup didn't finish"));
+  }
+  renderResults();
+}
+const hostOf = u => { try { return new URL(u).hostname.replace(/^www\./, ""); } catch(e){ return ""; } };
+async function webLookup(q){
+  const prompt = `The user searched their food log for: "${q}".
+${UNDERSTAND} Search the web using the corrected, full name (e.g. "Chick-fil-A grilled nuggets nutrition").
+Find the OFFICIAL nutrition facts for that food.
+Prefer, in order: the restaurant's or brand's own website or nutrition PDF, then USDA FoodData Central, then a reputable nutrition database (e.g. Nutritionix, FatSecret). Do not estimate when published numbers exist.
+Return the 1 to 3 best matching items (for a restaurant item, the exact menu item and size). For each, copy the published numbers for ONE SERVING exactly as the source lists them.
+- servingLabel: the serving as the source describes it (e.g. "sandwich", "medium fries", "1 cup", "2 tbsp")
+- servingGrams: the published serving weight in grams (ml for drinks). If the source doesn't give a weight, estimate it and set gramsEstimated true.
+- kcal, protein, carbs (total), fiber, fat for that serving, and any micros the source lists in ${MICRO_SPEC} (per serving; leave out unlisted ones)
+- source: the URL you took the numbers from
+Return ONLY JSON {"foods":[{"name":string,"brand":string,"servingLabel":string,"servingGrams":number,"gramsEstimated":boolean,"liquid":boolean,"kcal":number,"protein":number,"carbs":number,"fiber":number,"fat":number,"micros":{...},"source":string}]}. If no official page exists, use the most reputable source you find and still return the item. Return {"foods":[]} only if the search clearly isn't a food.`;
+  try {
+    const out = await askJSON(prompt, {web:true, signal:askCtl.signal});
+    const arr = (out && Array.isArray(out.foods)) ? out.foods : [];
+    const fallbackSrc = (out && out.__sources && out.__sources[0]) || "";
+    searchCtx.claudeResults = arr.filter(x => x && x.name && isFinite(+x.kcal) && +x.servingGrams > 0).slice(0,3).map(x => {
+      const g = +x.servingGrams, k = 100/g;
+      const n = {kcal:num(x.kcal)*k, p:num(x.protein)*k, c:num(x.carbs)*k, fib:num(x.fiber)*k, f:num(x.fat)*k};
+      const m = readMicros(x.micros, k); if (m) n.m = m;
+      const src = String(x.source || fallbackSrc || "");
+      return {id:"w:"+uid(), name:String(x.name).slice(0,80), brand:String(x.brand||"").slice(0,60), src:"web", source:src, n,
+        liquid:!!x.liquid, d:1, portions:[{l:(lb => /^[\d.½¼¾]/.test(lb) ? "serving ("+lb+")" : lb)(String(x.servingLabel||"serving").replace(/^1\s+(?=\D)/, "").slice(0,40)) + (x.gramsEstimated ? " (est. weight)" : ""), g, q:1}]};
+    });
+    if (!searchCtx.claudeResults.length) toast("No published nutrition found for that. Try a more specific name.");
+  } catch(e){
+    if (e && e.name === "AbortError") return;
+    toast(errText(e, "The web lookup didn't finish"));
   }
   renderResults();
 }
@@ -1104,7 +1169,7 @@ function openLog(food, {meal, entry, onAdd}={}){
   else { unit = units[0]; qty = 100; }
   let curMeal = entry ? entry.meal : (meal || S.active);
   const el = openSheet(`
-    <div class="sheet-h"><div><h3>${esc(food.name)}</h3><p>${food.brand?esc(food.brand)+" · ":""}${food.src==="claude"?"Claude estimate":food.src==="off"?"Open Food Facts":food.src==="label"?"From the label":food.src==="custom"?"Your food":"Typical values"}</p></div>
+    <div class="sheet-h"><div><h3>${esc(food.name)}</h3><p>${food.brand?esc(food.brand)+" · ":""}${food.src==="claude"?"Claude estimate":food.src==="web"?"From "+esc(hostOf(food.source)||"the web"):food.src==="off"?"Open Food Facts":food.src==="label"?"From the label":food.src==="custom"?"Your food":"Typical values"}</p></div>
       <button class="iconbtn" data-act="closeSheet" aria-label="Close"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
     <div class="sheet-b">
       <div class="macro-tiles num" id="tiles"></div>
@@ -1487,38 +1552,71 @@ async function importScreenshot(){
     if (blobs.length > S.imgMax) throw {code:"too_many"};
     const out = await S.sample.json(`The image(s) are screenshots of a food diary or nutrition app${blobs.length > 1 ? " (consecutive slices or pages that may overlap; never list the same entry twice)" : ""}.
 Extract EVERY food, drink or supplement entry that has calories. Skip headers, meal totals and daily totals.
-For each entry:
+For each entry return:
 - name: the food without the brand; brand: the brand if shown (often the text before the first comma), else ""
 - amount: the amount exactly as shown (e.g. "230 g", "1 medium", "0.5 x 2 scoops")
 - grams: weight in grams of that logged amount. Convert servings using the brand's serving size or typical USDA weights (ml ≈ g for drinks).
-- kcal: the calories exactly as shown for that entry (estimate only if none shown)
-- protein, carbs (total), fiber, fat in g, and ${MICRO_SPEC} — all for the LOGGED AMOUNT. IMPORTANT: if the screenshot shows any of these numbers for the entry, copy them EXACTLY as shown (if it shows net carbs, set carbs = net carbs + fiber). Only fill in values that aren't shown, using the brand's label if you know it, otherwise USDA FoodData Central.
-Return ONLY JSON {"items":[{"name":string,"brand":string,"amount":string,"grams":number,"kcal":number,"protein":number,"carbs":number,"fiber":number,"fat":number,"micros":{...}}]}`, {images:blobs, modelTier:"default"});
-    const items = ((out && out.items) || []).map(itemFromAI).filter(Boolean);
+- shown: ONLY the numbers that are actually visible in the screenshot for this entry, copied exactly (any of kcal, protein, carbs, netCarbs, fiber, fat). Leave out anything not visible. Never guess here.
+- estimate: your own values for the logged amount from the brand's label if you know it, otherwise USDA FoodData Central: kcal, protein, carbs (total), fiber, fat and ${MICRO_SPEC}.
+Return ONLY JSON {"items":[{"name":string,"brand":string,"amount":string,"grams":number,"shown":{"kcal":number,"protein":number,"carbs":number,"netCarbs":number,"fiber":number,"fat":number},"estimate":{"kcal":number,"protein":number,"carbs":number,"fiber":number,"fat":number,"micros":{...}}}]}`, {images:blobs, modelTier:"default"});
+    const items = ((out && out.items) || []).map(shotItem).filter(Boolean);
     if (topSheet() === el) closeSheet();
     if (!items.length){ toast("No foods found in that screenshot."); return; }
     openImportReview(items);
   } catch(e){ if (topSheet() === el) closeSheet(); toast(aiFail(e, "Couldn't read that screenshot. Try again.")); }
 }
+function shotItem(x){
+  if (!x || !x.name) return null;
+  const pick = (o, k) => { const v = parseFloat(o && o[k]); return isFinite(v) && v >= 0 ? v : null; };
+  const shown = {}, est = {};
+  ["kcal","protein","carbs","netCarbs","fiber","fat"].forEach(k => { const v = pick(x.shown, k); if (v != null) shown[k] = v; });
+  ["kcal","protein","carbs","fiber","fat"].forEach(k => { const v = pick(x.estimate, k); if (v != null) est[k] = v; });
+  if (shown.kcal == null && est.kcal == null) return null;
+  const g = parseFloat(x.grams) > 0 ? parseFloat(x.grams) : 100;
+  return {name:String(x.name).slice(0,90), brand:String(x.brand||"").slice(0,60), amount:String(x.amount||"").slice(0,40), grams:g, shown, est, micros:(x.estimate && x.estimate.micros) || null};
+}
+/* Nutrition for an imported entry, per 100 g, from the screenshot's numbers or from Claude's estimate */
+function shotN(it, mode){
+  const sh = mode === "claude" ? {} : it.shown, e = it.est;
+  const ek = e.kcal != null ? e.kcal : sh.kcal;
+  const fac = sh.kcal != null && ek > 0 ? sh.kcal/ek : 1; // fill-ins follow the screenshot's calories
+  const fill = k => (e[k] != null ? e[k] : 0) * fac;
+  const fib = sh.fiber != null ? sh.fiber : (sh.carbs != null || sh.netCarbs != null) ? 0 : fill("fiber"); // shown carbs stay exactly as shown
+  const v = {kcal: sh.kcal != null ? sh.kcal : (e.kcal || 0), p: sh.protein != null ? sh.protein : fill("protein"),
+    c: sh.carbs != null ? sh.carbs : sh.netCarbs != null ? sh.netCarbs + fib : fill("carbs"), fib, f: sh.fat != null ? sh.fat : fill("fat")};
+  const k = 100/it.grams, n = {kcal:v.kcal*k, p:v.p*k, c:v.c*k, fib:v.fib*k, f:v.f*k};
+  const m = readMicros(it.micros, k*fac); if (m) n.m = m;
+  return n;
+}
 function openImportReview(items){
   items.forEach(it => it.on = true);
-  let meal = S.active;
-  const el = openSheet(`<div class="sheet-h"><div><h3>Found ${items.length} food${items.length===1?"":"s"}</h3><p>Tap any to leave it out. Calories match your screenshot; macros and micros come from Claude.</p></div>
+  let meal = S.active, mode = "shot";
+  try { mode = localStorage.getItem("macro-diary-impmode") || "shot"; } catch(e){}
+  const shownLabel = it => { const L = {kcal:"kcal", protein:"P", carbs:"C", netCarbs:"net C", fiber:"fiber", fat:"F"}; const k = Object.keys(it.shown); return k.length ? "📷 " + k.map(x => L[x]).join(", ") : "📷 nothing readable"; };
+  const el = openSheet(`<div class="sheet-h"><div><h3>Found ${items.length} food${items.length===1?"":"s"}</h3><p>Tap any to leave it out.</p></div>
       <button class="iconbtn" data-act="closeSheet" aria-label="Close">${XBTN}</button></div>
     <div class="sheet-b">
+      <div class="field"><label>Use numbers from</label><div class="chips" id="impMode"><button class="chip" data-mode="shot">My screenshot</button><button class="chip" data-mode="claude">Claude's estimate</button></div>
+        <p class="fineprint" id="impModeNote" style="margin:0"></p></div>
       <div class="field"><label>Log to</label><div class="chips" id="impMeals">${MEALS.map(m => `<button class="chip${m===meal?" on":""}" data-m="${m}">${m}</button>`).join("")}</div></div>
       <div id="impList"></div>
       <p class="fineprint num" id="impTot" style="margin:0"></p>
       <button class="btn" id="impGo"></button>
     </div>`);
   const draw = () => {
+    items.forEach(it => it.n = shotN(it, mode));
+    el.querySelectorAll("#impMode .chip").forEach(c => c.classList.toggle("on", c.dataset.mode === mode));
+    el.querySelector("#impModeNote").textContent = mode === "shot"
+      ? "Keeps every number visible in your screenshot exactly. Anything it doesn't show is filled in by Claude and scaled to match the screenshot's calories."
+      : "Ignores the screenshot's numbers and uses Claude's database values for each food and amount.";
     el.querySelector("#impList").innerHTML = items.map((it,i) => { const s = scaled(it.n, it.grams);
-      return `<button class="imp-row${it.on?"":" off"}" data-i="${i}"><span class="check">${it.on?CHECK:""}</span><div class="t"><b>${esc(it.name)}</b><small class="num">${it.brand?esc(it.brand)+" · ":""}${it.amount && !/^\s*[\d.]+\s*g\s*$/i.test(it.amount) ? esc(it.amount)+" · " : ""}${fx(it.grams)} g</small>
+      return `<button class="imp-row${it.on?"":" off"}" data-i="${i}"><span class="check">${it.on?CHECK:""}</span><div class="t"><b>${esc(it.name)}</b><small class="num">${it.brand?esc(it.brand)+" · ":""}${it.amount && !/^\s*[\d.]+\s*g\s*$/i.test(it.amount) ? esc(it.amount)+" · " : ""}${fx(it.grams)} g${mode === "shot" ? " · "+shownLabel(it) : ""}</small>
         <div class="mm num"><span class="p">P ${fx(s.p)}</span><span class="c">C ${fx(Math.max(0,s.c-s.fib))}</span><span class="f">F ${fx(s.f)}</span></div></div><span class="k num">${fx(s.kcal)} kcal</span></button>`; }).join("");
     const sel = items.filter(x => x.on), t = totals(sel);
     el.querySelector("#impTot").textContent = `${sel.length} selected · ${Math.round(t.kcal)} kcal · P ${fx(t.p)} · net C ${fx(t.net)} · F ${fx(t.f)}`;
     const b = el.querySelector("#impGo"); b.textContent = `Log ${sel.length} to ${meal}`; b.disabled = !sel.length;
   };
+  el.querySelector("#impMode").addEventListener("click", e => { const b = e.target.closest("[data-mode]"); if (!b) return; mode = b.dataset.mode; try { localStorage.setItem("macro-diary-impmode", mode); } catch(err){} draw(); });
   el.querySelector("#impList").addEventListener("click", e => { const r = e.target.closest("[data-i]"); if (!r) return; const it = items[+r.dataset.i]; it.on = !it.on; draw(); });
   el.querySelector("#impMeals").addEventListener("click", e => { const b = e.target.closest("[data-m]"); if (!b) return; meal = b.dataset.m; el.querySelectorAll("#impMeals .chip").forEach(c => c.classList.toggle("on", c === b)); draw(); });
   el.querySelector("#impGo").addEventListener("click", () => {
@@ -1526,7 +1624,7 @@ function openImportReview(items){
     const d = day();
     sel.forEach(it => {
       const portions = it.amount && !/^\s*[\d.]+\s*g\s*$/i.test(it.amount) ? [{l:"serving ("+it.amount+")", g:it.grams, q:1}] : [];
-      const food = upsertFood({name:it.name, brand:it.brand, n:JSON.parse(JSON.stringify(it.n)), portions, src:"claude"});
+      const food = upsertFood({name:it.name, brand:it.brand, n:JSON.parse(JSON.stringify(it.n)), portions, src:mode === "shot" ? "custom" : "claude"});
       d.entries.push({id:uid(), t:Date.now(), foodId:food.id, name:it.name, brand:it.brand, n:JSON.parse(JSON.stringify(it.n)), grams:it.grams, qty:r1(it.grams), unit:"g", ulabel:"g", meal});
       addRecent(food.id);
     });
