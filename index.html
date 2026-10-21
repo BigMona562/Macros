@@ -287,6 +287,7 @@ body::after{display:none}
 /* iOS can leave a strip under the app that only the page background reaches: paint it like the tab bar */
 body{background:var(--strip,var(--panel))!important}
 :root:not(.has-bg) #app{background:var(--bg)}
+:root.short-vp .tabbar{padding-bottom:6px}
 body::before{z-index:2;-webkit-backdrop-filter:blur(var(--blur,16px)) saturate(1.15);backdrop-filter:blur(var(--blur,16px)) saturate(1.15)}
 </style>
 </head>
@@ -1929,7 +1930,7 @@ Return ONLY JSON {"foods":[{"i":number,${MICRO_SPEC}}]}`, {modelTier:"default"})
 }
 
 /* ---------- Repair saved recipes/meals whose serving sizes or nutrition went missing ---------- */
-const APP_VERSION = "2026.10.21-21";
+const APP_VERSION = "2026.10.21-22";
 function repairFoods(){
   let fixed = 0;
   for (const f of Object.values(S.foods)){
@@ -2219,6 +2220,19 @@ document.querySelectorAll(".view").forEach(v => { const w = document.createEleme
 document.addEventListener("keydown", e => { if (e.key === "Escape"){ if (document.querySelector(".menu")) closeMenu(); else closeSheet(); } });
 document.addEventListener("visibilitychange", () => { if (!document.hidden){ const t = dayKey(new Date()); if (S._lastToday && S._lastToday !== t && S.date === S._lastToday){ S.date = t; renderDiary(); } S._lastToday = t; } });
 S._lastToday = S.date;
+
+/* Home-screen iPhone app: when iOS hands the app a screen shorter than the display (see-through status bar),
+   the home indicator sits in the strip below the app, so the tab bar doesn't need its own bottom padding. */
+function fitBottom(){
+  try {
+    if (!navigator.standalone) return;
+    const portrait = matchMedia("(orientation: portrait)").matches, sh = portrait ? screen.height : screen.width;
+    const vh = $("#app").getBoundingClientRect().height || innerHeight;
+    document.documentElement.classList.toggle("short-vp", sh - vh > 20);
+  } catch(e){}
+}
+addEventListener("resize", fitBottom); addEventListener("orientationchange", () => setTimeout(fitBottom, 300));
+setTimeout(fitBottom, 0);
 
 /* ---------- Boot ---------- */
 Store.local();
