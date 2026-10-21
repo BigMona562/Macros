@@ -380,7 +380,7 @@ body::after{display:none}
       <div class="subhead"><button class="iconbtn back" data-act="subBack" aria-label="Back"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5 8 12l7 7"/></svg></button><h2>AI Features</h2><span></span></div>
       <div class="panel"><div class="stack">
         <p class="fineprint" id="aiStatus" style="margin:0"></p>
-        <div class="field"><label for="apiKey">Anthropic API key</label><input class="inp" id="apiKey" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="sk-ant-…"></div>
+        <div class="field"><label for="apiKey">Anthropic API key</label><div style="display:flex;gap:8px"><input class="inp" id="apiKey" type="password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="sk-ant-api03-…" style="flex:1;min-width:0"><button class="chip" data-act="toggleKey" style="flex:none">Show</button></div><p class="fineprint num" id="keyInfo" style="margin:0"></p></div>
         <details><summary>Models</summary>
           <div class="stack" style="margin-top:10px">
             <div class="field"><label for="mFast">Food lookups</label><input class="inp" id="mFast" autocapitalize="off" spellcheck="false"></div>
@@ -656,7 +656,7 @@ const AI = {
 function blobB64(b){ return new Promise((res, rej) => { const fr = new FileReader(); fr.onload = () => res(String(fr.result).split(",")[1]); fr.onerror = rej; fr.readAsDataURL(b); }); }
 function aiErr(e, fallback){
   const c = e && e.code;
-  if (c === "bad_key") return "Your API key was rejected. Check it in More.";
+  if (c === "bad_key") return "Anthropic rejected this key. Make sure you copied the whole key (it is about 100 characters), then try again.";
   if (c === "no_credit") return "Your API account is out of credit.";
   if (c === "rate_limited") return "Too many requests. Try again in a moment.";
   if (c === "network") return "Couldn't reach Claude. Check your connection.";
@@ -899,6 +899,8 @@ function renderMore(){
   $("#tgtCheck").textContent = `Your macro targets add up to about ${Math.round(macroK)} kcal (protein and net carbs at 4 kcal/g, fat at 9).`;
   if (document.activeElement !== $("#apiKey")) $("#apiKey").value = AI.key;
   $("#mFast").value = AI.fast; $("#mVision").value = AI.vision;
+  const kv = $("#apiKey").value.replace(/\s+/g, "");
+  $("#keyInfo").textContent = kv ? `${kv.length} characters · starts “${kv.slice(0,10)}…” · ends “…${kv.slice(-4)}”` : "";
   $("#whoLine").textContent = "Saved on this iPhone";
   $("#aiStatus").innerHTML = AI.key ? `<b style="color:var(--protein)">On.</b> Look up, label reading, screenshot import and recipe photos are available.` : `<b>Off.</b> Search, live barcode scanning and Open Food Facts work without a key.`;
 }
@@ -1490,7 +1492,7 @@ For each entry:
 - amount: the amount exactly as shown (e.g. "230 g", "1 medium", "0.5 x 2 scoops")
 - grams: weight in grams of that logged amount. Convert servings using the brand's serving size or typical USDA weights (ml ≈ g for drinks).
 - kcal: the calories exactly as shown for that entry (estimate only if none shown)
-- protein, carbs (total), fiber, fat in g, and ${MICRO_SPEC} — all for the LOGGED AMOUNT, from the brand's label if you know it, otherwise USDA FoodData Central. Keep protein×4 + carbs×4 + fat×9 consistent with kcal.
+- protein, carbs (total), fiber, fat in g, and ${MICRO_SPEC} — all for the LOGGED AMOUNT. IMPORTANT: if the screenshot shows any of these numbers for the entry, copy them EXACTLY as shown (if it shows net carbs, set carbs = net carbs + fiber). Only fill in values that aren't shown, using the brand's label if you know it, otherwise USDA FoodData Central.
 Return ONLY JSON {"items":[{"name":string,"brand":string,"amount":string,"grams":number,"kcal":number,"protein":number,"carbs":number,"fiber":number,"fat":number,"micros":{...}}]}`, {images:blobs, modelTier:"default"});
     const items = ((out && out.items) || []).map(itemFromAI).filter(Boolean);
     if (topSheet() === el) closeSheet();
@@ -1613,19 +1615,43 @@ async function recipePhoto(R, redraw, btn){
     if (blobs.length > S.imgMax) throw {code:"too_many"};
     const out = await S.sample.json(`The image(s) show the ingredients of a recipe or meal with their weights: a written or typed list, an app screenshot, packages, or food on a kitchen scale.${blobs.length > 1 ? " Slices of one tall image may overlap; never list an ingredient twice." : ""}
 List every ingredient with its weight in grams (oz × 28.35; ml ≈ g for watery liquids). If a weight isn't shown, estimate it and set "estimated": true.
-For each ingredient give nutrition for THAT AMOUNT: kcal, protein, carbs (total), fiber, fat and ${MICRO_SPEC}, from the brand's label if visible, otherwise USDA FoodData Central (use raw vs cooked values to match how it's described).
+For each ingredient give nutrition for THAT AMOUNT: kcal, protein, carbs (total), fiber, fat and ${MICRO_SPEC}.
+IMPORTANT: if the image shows calories or macros for an ingredient, copy those numbers EXACTLY as shown. Only fill in values that aren't shown, from the brand's label if visible, otherwise USDA FoodData Central (raw vs cooked to match the description). If it shows net carbs instead of total carbs, set carbs = net carbs + fiber.
+If the image shows TOTALS for the whole recipe or per serving (calories, protein, carbs, net carbs, fiber, fat), copy them exactly into "totals" and say whether they are for the "whole" recipe or one "serving". Leave a total out if it isn't shown.
 Also suggest a short recipe name, and the number of servings if the image states one.
-Return ONLY JSON {"name":string,"servings":number or null,"items":[{"name":string,"grams":number,"estimated":boolean,"kcal":number,"protein":number,"carbs":number,"fiber":number,"fat":number,"micros":{...}}]}`, {images:blobs, modelTier:"default"});
+Return ONLY JSON {"name":string,"servings":number or null,"totals":{"scope":"whole"|"serving","kcal":number,"protein":number,"carbs":number,"netCarbs":number,"fiber":number,"fat":number} or null,"items":[{"name":string,"grams":number,"estimated":boolean,"kcal":number,"protein":number,"carbs":number,"fiber":number,"fat":number,"micros":{...}}]}`, {images:blobs, modelTier:"default"});
     const items = ((out && out.items) || []).map(itemFromAI).filter(Boolean).map(it => ({name:it.name + (it.est ? " (est. weight)" : ""), grams:r1(it.grams), n:it.n}));
     if (!items.length) toast("No ingredients found in that photo.");
     else {
-      R.items.push(...items);
       if (!R.name && out.name) R.name = String(out.name).slice(0,80);
       if (+out.servings > 0 && R.servings === 1) R.servings = +out.servings;
-      redraw(); toast(`Added ${items.length} ingredient${items.length===1?"":"s"}. Check the weights.`);
+      const matched = matchTotals(items, out.totals, R.servings);
+      R.items.push(...items);
+      redraw(); toast(matched ? `Added ${items.length} ingredients. Totals match your screenshot.` : `Added ${items.length} ingredient${items.length===1?"":"s"}. Check the weights.`);
     }
   } catch(e){ toast(aiFail(e, "Couldn't read that photo. Try again.")); }
   btn.disabled = false; btn.textContent = label;
+}
+
+/* Scale ingredient nutrition so the recipe's totals equal the totals printed in the photo */
+function matchTotals(items, T, servings){
+  if (!T || typeof T !== "object" || !items.length) return false;
+  const mult = T.scope === "serving" ? (servings || 1) : 1;
+  const get = k => { const v = parseFloat(T[k]); return isFinite(v) && v >= 0 ? v*mult : null; };
+  const target = {kcal:get("kcal"), p:get("protein"), c:get("carbs"), fib:get("fiber"), f:get("fat")};
+  const net = get("netCarbs");
+  const cur = totals(items);
+  if (target.c == null && net != null) target.c = net + (target.fib != null ? target.fib : cur.fib);
+  const G = items.reduce((a,x) => a + x.grams, 0);
+  let any = false;
+  for (const k of ["kcal","p","c","fib","f"]){
+    const want = target[k]; if (want == null) continue;
+    const have = cur[k];
+    if (have > 0) items.forEach(it => it.n[k] *= want/have);
+    else if (want > 0 && G > 0) items.forEach(it => it.n[k] = want/G*100);
+    any = true;
+  }
+  return any;
 }
 
 /* ---------- Micronutrient details ---------- */
@@ -1736,9 +1762,11 @@ document.addEventListener("click", async e => {
     case "typeCode": closeSheet(); manualBarcode(true); break;
     case "searchOFF": searchOFF(); break;
     case "pickOff": { const f = (searchCtx.offResults||[])[+a.dataset.i]; if (f) pickFood(f); break; }
-    case "saveKey": { AI.key = $("#apiKey").value.trim(); AI.fast = $("#mFast").value.trim() || AI.fast; AI.vision = $("#mVision").value.trim() || AI.vision; AI.persist(); applyAI(); renderMore(); toast(AI.key ? "API key saved" : "API key removed"); break; }
+    case "toggleKey": { const i = $("#apiKey"); i.type = i.type === "password" ? "text" : "password"; a.textContent = i.type === "password" ? "Show" : "Hide"; break; }
+    case "saveKey": { $("#apiKey").value = $("#apiKey").value.replace(/\s+/g, ""); if ($("#apiKey").value && !/^sk-ant-/.test($("#apiKey").value)){ toast("That isn't an API key. It should start with sk-ant-"); break; } AI.key = $("#apiKey").value.trim(); AI.fast = $("#mFast").value.trim() || AI.fast; AI.vision = $("#mVision").value.trim() || AI.vision; AI.persist(); applyAI(); renderMore(); toast(AI.key ? "API key saved" : "API key removed"); break; }
     case "testKey": {
-      const k = $("#apiKey").value.trim(); if (!k){ toast("Paste a key first."); break; }
+      const k = $("#apiKey").value.replace(/\s+/g, ""); $("#apiKey").value = k; if (!k){ toast("Paste a key first."); break; }
+      if (!/^sk-ant-/.test(k)){ toast("That isn't an API key. It should start with sk-ant-"); break; }
       const prev = AI.key; AI.key = k; a.disabled = true; a.textContent = "Testing…";
       try { await AI.json('Return {"ok":true}'); toast("Key works. Tap Save key."); } catch(e){ toast(aiErr(e, "The test didn't go through.")); }
       AI.key = prev; a.disabled = false; a.textContent = "Test key"; break;
