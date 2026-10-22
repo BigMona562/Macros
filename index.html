@@ -1934,7 +1934,7 @@ Return ONLY JSON {"foods":[{"i":number,${MICRO_SPEC}}]}`, {modelTier:"default"})
 }
 
 /* ---------- Repair saved recipes/meals whose serving sizes or nutrition went missing ---------- */
-const APP_VERSION = "2026.10.21-24";
+const APP_VERSION = "2026.10.21-25";
 function repairFoods(){
   let fixed = 0;
   for (const f of Object.values(S.foods)){
@@ -2247,7 +2247,11 @@ function fitBottom(){
     if (!navigator.standalone) return;
     const portrait = matchMedia("(orientation: portrait)").matches, sh = portrait ? screen.height : screen.width;
     const vh = $("#app").getBoundingClientRect().height || innerHeight;
-    document.documentElement.classList.toggle("short-vp", sh - vh > 20);
+    // Only the see-through top bar shortens the screen from the bottom; a solid top bar shortens it from the top,
+    // and then the tab bar must keep its normal space above the home indicator.
+    let clear = false; try { clear = localStorage.getItem("macro-diary-sb") === "clear"; } catch(e){}
+    const underStatus = parseFloat(getComputedStyle($("#app")).paddingTop) > 0;
+    document.documentElement.classList.toggle("short-vp", clear && underStatus && sh - vh > 20);
   } catch(e){}
 }
 addEventListener("resize", fitBottom); addEventListener("orientationchange", () => setTimeout(fitBottom, 300));
