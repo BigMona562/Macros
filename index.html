@@ -429,7 +429,7 @@ body::before{z-index:2;-webkit-backdrop-filter:blur(var(--blur,16px)) saturate(1
     </div></div>
     <div class="panel"><h3>Check-ins</h3><p class="fineprint" style="margin:-4px 0 6px">Dots: sleep · stress · gym · drive (green good, red poor)</p><div class="lrows" id="wHist" style="background:transparent"></div></div>
     <div class="panel"><h3>Calories, last 7 days</h3><p class="fineprint" id="discSub" style="margin:0 0 8px"></p><div id="chart" style="overflow-x:auto"></div></div>
-    <div class="panel"><h3>Daily averages (logged days)</h3><div class="stat-grid" id="avgs"></div></div>
+    <div class="panel"><h3>Daily averages (complete days)</h3><div class="stat-grid" id="avgs"></div></div>
   </section>
 
   <!-- FOODS -->
@@ -482,6 +482,7 @@ body::before{z-index:2;-webkit-backdrop-filter:blur(var(--blur,16px)) saturate(1
         <button class="mrow" data-sub="backup"><span class="ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></span><span>Backup</span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg></button>
         <button class="mrow" data-sub="install"><span class="ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg></span><span>Install on iPhone</span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg></button>
         <button class="mrow" data-sub="look"><span class="ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.6-.8 1.6-1.6 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-.9.7-1.6 1.6-1.6H16a5 5 0 0 0 5-5C21 6.6 17 3 12 3z"/><circle cx="7.5" cy="11" r="1.2" fill="currentColor"/><circle cx="10.5" cy="7.2" r="1.2" fill="currentColor"/><circle cx="15" cy="7.6" r="1.2" fill="currentColor"/></svg></span><span>Appearance</span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg></button>
+        <button class="mrow" data-sub="widget"><span class="ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="18" height="8" rx="2"/></svg></span><span>Widget</span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg></button>
         <button class="mrow" data-sub="about"><span class="ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6"/><circle cx="12" cy="7.6" r="1.2" fill="currentColor" stroke="none"/></svg></span><span>About</span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg></button>
       </div>
       <!--/MORE-MENU-->
@@ -550,6 +551,20 @@ body::before{z-index:2;-webkit-backdrop-filter:blur(var(--blur,16px)) saturate(1
     <div class="sub" data-name="about" hidden>
       <div class="subhead"><button class="iconbtn back" data-act="subBack" aria-label="Back"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5 8 12l7 7"/></svg></button><h2>About</h2><span></span></div>
       <div class="panel"><h3>About the numbers</h3><p class="fineprint" style="margin:0">Built-in foods use typical USDA values per 100 g. Scanned products come from Open Food Facts, a free community database, so double-check anything that looks off. Label reads copy the printed Nutrition Facts. Claude lookups, screenshot imports and filled-in micronutrients are estimates. Net carbs = total carbs − fiber. Daily Values follow FDA labeling for adults.</p></div>
+    </div>
+    <div class="sub" data-name="widget" hidden>
+      <div class="subhead"><button class="iconbtn back" data-act="subBack" aria-label="Back"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5 8 12l7 7"/></svg></button><h2>Widget</h2><span></span></div>
+      <div class="panel"><h3>Home and lock screen widget</h3>
+        <p class="fineprint" style="margin:0 0 12px">Shows calories and protein left, your phase and trend, and this app's Anthropic spend. It runs in the free <b>Scriptable</b> app and reads today's numbers from a private GitHub Gist that this app updates after every change.</p>
+        <div id="wgBox"></div></div>
+      <div class="panel"><h3>Set it up</h3><ol class="plan">
+        <li>On GitHub: <b>Settings → Developer settings → Fine-grained tokens → Generate new token</b>. Under <b>Account permissions</b> set <b>Gists</b> to <b>Read and write</b>. Nothing else. Copy the token.</li>
+        <li>Paste it above and tap <b>Connect widget</b>, then tap <b>Copy</b> next to the Gist ID.</li>
+        <li>Install <b>Scriptable</b> from the App Store. Tap <b>+</b>, paste the widget script, and name it <b>Mona's Macros</b>.</li>
+        <li>Long-press your home or lock screen → <b>Edit</b> / <b>Customize</b> → add a <b>Scriptable</b> widget in any size. Tap it to edit: Script = <b>Mona's Macros</b>, Parameter = <b>your Gist ID</b>.</li></ol>
+        <p class="fineprint" style="margin:10px 0 0">The gist is unlisted and holds only today's totals, your phase and spend. Your token stays on this phone and can only touch gists.</p></div>
+      <div class="panel"><h3>Anthropic API spend</h3><p class="fineprint" id="apiUseLine" style="margin:0;color:var(--text)"></p>
+        <p class="fineprint" style="margin:8px 0 0">Counted from each AI request's tokens and web searches at Anthropic's list prices. The exact bill is in the Anthropic Console under Usage.</p></div>
     </div>
     <!--/MORE-SUBS-->
   </section>
@@ -768,7 +783,7 @@ const Store = {
     try { localStorage.setItem(LS_KEY, JSON.stringify({targets:S.targets, foods:S.foods, barcodes:S.barcodes, recent:S.recent, days:S.days, biMicros:S.biMicros, body:S.body})); }
     catch(e){ toast("Phone storage is full. Export a backup."); }
   },
-  save(){ clearTimeout(this.t); this.t = setTimeout(() => this.saveLocal(), 250); },
+  save(){ clearTimeout(this.t); this.t = setTimeout(() => this.saveLocal(), 250); try { pushWidgetSoon(); } catch(e){} },
   async init(){ try { if (navigator.storage && navigator.storage.persist) await navigator.storage.persist(); } catch(e){} },
   async loadDay(){}
 };
@@ -801,6 +816,7 @@ const AI = {
         throw {code: r.status===401 ? "bad_key" : r.status===429 ? "rate_limited" : /credit/i.test(m) ? "no_credit" : (opts.web && /web.?search/i.test(m)) ? "no_web" : (r.status===404 || /model/i.test(m)) ? "bad_model" : "error", message:m};
       }
       const j = await r.json();
+      try { trackApiUse(body.model, j.usage); } catch(e){}
       blocks.push(...(j.content||[]));
       if (j.stop_reason === "pause_turn"){ messages.push({role:"assistant", content:j.content}); continue; }
       break;
@@ -1021,22 +1037,24 @@ async function renderDiscover(){
     const W = 340, H = 190, L = 34, B = 26, top = 18, bw = 26;
     const step = (W - L - 8) / 7;
     const y = v => top + (H - top - B) * (1 - v/max);
-    let svg = `<svg class="chart" viewBox="0 0 ${W} ${H}" width="100%" style="min-width:300px" role="img" aria-label="Calories per day for the last 7 days">`;
+    let svg = `<svg class="chart" viewBox="0 0 ${W} ${H}" width="100%" style="min-width:300px" role="img" aria-label="Calories per day for the last 7 days"><defs><pattern id="inprog" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="7" height="7" fill="var(--card-hi)"/><rect width="3" height="7" fill="var(--accent)" opacity=".6"/></pattern></defs>`;
     [0, Math.round(T)].forEach(v => { svg += `<text x="${L-6}" y="${y(v)+4}" text-anchor="end">${v}</text>`; });
     svg += `<line x1="${L}" x2="${W-4}" y1="${y(0)}" y2="${y(0)}" stroke="var(--line)" stroke-width="1"/>`;
     vals.forEach((v,i) => {
       const x = L + step*i + (step-bw)/2, h = y(0) - y(v.kcal);
       const k = keys[i], dt = keyToDate(k);
-      svg += `<rect x="${x}" y="${y(v.kcal)}" width="${bw}" height="${Math.max(0,h)}" rx="6" fill="${k===S.date?"var(--accent)":"var(--card-hi)"}"/>`;
+      const prog = v.kcal > 0 && !dayComplete(k);
+      svg += `<rect x="${x}" y="${y(v.kcal)}" width="${bw}" height="${Math.max(0,h)}" rx="6" fill="${prog ? "url(#inprog)" : k===S.date?"var(--accent)":"var(--card-hi)"}"/>`;
       if (v.kcal > 0) svg += `<text class="v" x="${x+bw/2}" y="${y(v.kcal)-5}" text-anchor="middle">${Math.round(v.kcal)}</text>`;
       svg += `<text x="${x+bw/2}" y="${H-8}" text-anchor="middle">${dt.toLocaleDateString(undefined,{weekday:"short"}).slice(0,2)}</text>`;
     });
     svg += `<line x1="${L}" x2="${W-4}" y1="${y(T)}" y2="${y(T)}" stroke="var(--teal)" stroke-width="1.5" stroke-dasharray="5 4"/>`;
     svg += `</svg>`;
     $("#chart").innerHTML = svg;
-    const logged = vals.filter(v => v.kcal > 0);
+    const logged = vals.filter((v,i) => v.kcal > 0 && dayComplete(keys[i]));
+    const open = keys.filter((k,i) => vals[i].kcal > 0 && !dayComplete(k));
     const avg = k => logged.length ? logged.reduce((a,v) => a+v[k], 0)/logged.length : 0;
-    $("#discSub").textContent = logged.length ? `${logged.length} of 7 days have food logged. The dashed line is your ${Math.round(T)} kcal target.` : "Log some food and your week fills in here.";
+    $("#discSub").textContent = (logged.length ? `${logged.length} complete day${logged.length===1?"":"s"} logged. The dashed line is your ${Math.round(T)} kcal target.` : "Log some food and your week fills in here.") + (open.length ? " Today's bar is in progress (striped) and isn't in the averages until the day ends or you tap ✓ on the Diary." : "");
     const st = (lab, v, unit, tgt, col) => `<div class="stat"><b class="num" style="color:${col}">${fx(v)}<span style="font-size:14px;color:var(--muted);font-weight:700"> ${unit}</span></b><small>${lab}${tgt?` · target ${fx(tgt)}`:""}</small></div>`;
     $("#avgs").innerHTML = st("Energy", avg("kcal"), "kcal", S.targets.kcal, "var(--energy)") + st("Protein", avg("p"), "g", S.targets.protein, "var(--protein)")
       + st("Net carbs", avg("net"), "g", S.targets.net, "var(--carbs)") + st("Fat", avg("f"), "g", S.targets.fat, "var(--fat)");
@@ -2048,7 +2066,7 @@ Return ONLY JSON {"foods":[{"i":number,${MICRO_SPEC}}]}`, {modelTier:"default"})
 }
 
 /* ---------- Repair saved recipes/meals whose serving sizes or nutrition went missing ---------- */
-const APP_VERSION = "2026.10.23-6";
+const APP_VERSION = "2026.10.23-8";
 function repairFoods(){
   let fixed = 0;
   for (const f of Object.values(S.foods)){
@@ -2479,7 +2497,8 @@ S.body = bodyNorm(S.body);
 S.wRange = 30;
 const todayKey = () => dayKey(new Date());
 const fmtW = v => v == null ? "–" : (Math.round(v*10)/10).toFixed(1);
-function intakeMap(){ const m = {}; for (const [k, d] of Object.entries(S.days)) if (d && d.entries && d.entries.length) m[k] = totals(d.entries).kcal; return m; }
+function dayComplete(k){ const d = S.days[k]; return k < dayKey(new Date()) || !!(d && d.done); }
+function intakeMap(){ const m = {}; for (const [k, d] of Object.entries(S.days)) if (d && d.entries && d.entries.length && dayComplete(k)) m[k] = totals(d.entries).kcal; return m; }
 function saveBody(){ try { Store.saveLocal(); } catch(e){} Store.save("body"); }
 let lastCoach = null;
 function startPayback(delta){
@@ -2557,7 +2576,7 @@ function weekHTML(R){
   const plan = ph === "cut" ? -(+S.body.rate.cut||1) : ph === "bulk" ? (+S.body.rate.bulk||0.5) : 0;
   const scaled7 = lb * 7 / wk.days;
   return `<div class="stat-grid">
-      <div class="stat"><b class="num">${Math.round(wk.avg)}<span class="u"> kcal</span></b><small>Avg intake · ${wk.days} logged day${wk.days===1?"":"s"}</small></div>
+      <div class="stat"><b class="num">${Math.round(wk.avg)}<span class="u"> kcal</span></b><small>Avg intake · ${wk.days} complete day${wk.days===1?"":"s"}</small></div>
       <div class="stat"><b class="num" style="color:${lb < 0 ? "var(--protein)" : "var(--warn)"}">${lb > 0 ? "+" : ""}${lb.toFixed(2)}<span class="u"> lb</span></b><small>Est. fat ${lb < 0 ? "lost" : "gained"} so far</small></div>
     </div>
     <p class="fineprint num" style="margin:10px 0 0">At this pace the week lands near ${scaled7 > 0 ? "+" : ""}${scaled7.toFixed(2)} lb (plan ${plan > 0 ? "+" : ""}${plan} lb).${evs.length ? " Cheat and high days are included: they cost real calories, but the scale jump right after is mostly water." : ""}</p>${evRows}`;
@@ -3018,6 +3037,105 @@ function endRefeed(){
   S.body.refeed = null; saveBody(); Store.save("settings"); renderProgress(); toast("Refeed ended. Cut targets restored.");
 }
 
+
+/* ---------- Anthropic API spend (this app's own calls) ---------- */
+const PRICE = { // USD per million tokens [input, output]
+  "claude-haiku-5-5": [0.10, 0.50], "claude-sonnet-5-5": [2.00, 10.00], "claude-opus-5-5": [5.00, 25.00],
+};
+const WEB_SEARCH_USD = 10 / 1000;
+const USE_KEY = "macro-diary-apiuse";
+function apiUse(){
+  let u = null; try { u = JSON.parse(localStorage.getItem(USE_KEY) || "null"); } catch(e){}
+  const m = dayKey(new Date()).slice(0, 7);
+  if (!u || u.month !== m) u = {month:m, usd:0, calls:0, inTok:0, outTok:0, searches:0, today:{d:dayKey(new Date()), usd:0, calls:0}};
+  if (!u.today || u.today.d !== dayKey(new Date())) u.today = {d:dayKey(new Date()), usd:0, calls:0};
+  return u;
+}
+function trackApiUse(model, usage){
+  if (!usage) return;
+  const p = PRICE[model] || PRICE["claude-sonnet-5-5"];
+  const inT = (usage.input_tokens || 0) + (usage.cache_creation_input_tokens || 0) + (usage.cache_read_input_tokens || 0) * 0.1;
+  const outT = usage.output_tokens || 0, srch = (usage.server_tool_use && usage.server_tool_use.web_search_requests) || 0;
+  const usd = inT/1e6*p[0] + outT/1e6*p[1] + srch*WEB_SEARCH_USD;
+  const u = apiUse();
+  u.usd += usd; u.calls += 1; u.inTok += Math.round(inT); u.outTok += outT; u.searches += srch;
+  u.today.usd += usd; u.today.calls += 1;
+  try { localStorage.setItem(USE_KEY, JSON.stringify(u)); } catch(e){}
+  pushWidgetSoon();
+}
+
+/* ---------- Widget sync: today's numbers to a private GitHub Gist the Scriptable widget reads ---------- */
+const WG_KEY = "macro-diary-widget", WG_FILE = "monas-macros.json";
+let WG = {token:"", gist:"", last:0, err:""};
+try { WG = {...WG, ...JSON.parse(localStorage.getItem(WG_KEY) || "{}")}; } catch(e){}
+const saveWG = () => { try { localStorage.setItem(WG_KEY, JSON.stringify(WG)); } catch(e){} };
+function widgetPayload(){
+  const k = dayKey(new Date()), d = S.days[k] || {entries:[], water:0}, t = totals(d.entries || []), T = targetsFor(k);
+  const R = (() => { try { return coach(S.body, intakeMap(), k, S.targets); } catch(e){ return null; } })();
+  const u = apiUse(), cs = getComputedStyle(document.documentElement);
+  const v = n => cs.getPropertyValue(n).trim();
+  return {
+    v:1, app:"Mona's Macros", updated:new Date().toISOString(), date:k,
+    kcal:{eaten:Math.round(t.kcal), target:Math.round(T.kcal)},
+    protein:{eaten:Math.round(t.p), target:Math.round(T.protein)},
+    net:{eaten:Math.round(t.net), target:Math.round(T.net)},
+    fat:{eaten:Math.round(t.f), target:Math.round(T.fat)},
+    water:{oz:Math.round(d.water || 0), target:Math.round(S.targets.water || 64)},
+    phase:S.body.phase, status: R && R.decision ? R.decision.label : "", weight7: R && R.now ? Math.round(R.now*10)/10 : null,
+    rate: R && R.rate != null ? Math.round(R.rate*100)/100 : null,
+    api:{month:u.month, usd:Math.round(u.usd*1000)/1000, calls:u.calls, today:Math.round(u.today.usd*1000)/1000},
+    theme:{accent:LOOK.accent, accent2:LOOK.accent2, bg:v("--bg") || "#12121F", card:"#282A3B", protein:"#66D78F", carbs:"#46CEDC", fat:"#C27BD1"},
+    links:{app:location.href.split("#")[0], claudeUsage:"https://claude.ai/settings/usage", console:"https://console.anthropic.com/settings/usage"}
+  };
+}
+let wgTimer = null, wgLastJSON = "";
+function pushWidgetSoon(){ if (!WG.token || !WG.gist) return; clearTimeout(wgTimer); wgTimer = setTimeout(pushWidget, 2500); }
+async function pushWidget(force){
+  if (!WG.token || !WG.gist) return false;
+  const p = widgetPayload(), body = JSON.stringify(p, null, 1), cmp = body.replace(/"updated":"[^"]*",?/, "");
+  if (!force && cmp === wgLastJSON) return true;
+  try {
+    const r = await fetch(`https://api.github.com/gists/${WG.gist}`, {method:"PATCH", headers:{"Authorization":"Bearer "+WG.token, "Accept":"application/vnd.github+json", "Content-Type":"application/json"}, body:JSON.stringify({files:{[WG_FILE]:{content:body}}})});
+    if (!r.ok) throw r.status;
+    wgLastJSON = cmp; WG.last = Date.now(); WG.err = ""; saveWG(); return true;
+  } catch(e){ WG.err = e === 401 ? "GitHub rejected the token. Make a new one and reconnect." : e === 404 ? "The widget's gist was deleted. Disconnect and connect again." : "Couldn't reach GitHub. It'll retry on the next change."; saveWG(); return false; }
+  finally { if (S.tab === "more") renderWidgetPage(); }
+}
+async function connectWidget(token){
+  token = String(token || "").trim();
+  if (!/^(github_pat_|ghp_)[A-Za-z0-9_]{20,}$/.test(token)){ toast("That doesn't look like a GitHub token. It starts with github_pat_ or ghp_."); return; }
+  try {
+    const r = await fetch("https://api.github.com/gists", {method:"POST", headers:{"Authorization":"Bearer "+token, "Accept":"application/vnd.github+json", "Content-Type":"application/json"},
+      body:JSON.stringify({description:"Mona's Macros widget data (today's totals)", public:false, files:{[WG_FILE]:{content:JSON.stringify(widgetPayload(), null, 1)}}})});
+    if (r.status === 401) throw "GitHub rejected that token. Check you copied all of it.";
+    if (r.status === 403 || r.status === 404) throw "That token can't create gists. Give it the Gists: Read and write permission.";
+    if (!r.ok) throw "GitHub didn't accept the request. Try again.";
+    const j = await r.json();
+    WG = {token, gist:j.id, last:Date.now(), err:""}; saveWG(); wgLastJSON = "";
+    renderWidgetPage(); toast("Widget connected. Copy the Gist ID into Scriptable.");
+  } catch(e){ toast(typeof e === "string" ? e : "Couldn't reach GitHub. Check your connection."); }
+}
+function renderWidgetPage(){
+  const box = document.getElementById("wgBox"); if (!box) return;
+  const u = apiUse();
+  const usd = x => x < 0.01 ? "<$0.01" : "$" + x.toFixed(2);
+  document.getElementById("apiUseLine") && (document.getElementById("apiUseLine").textContent = `This month: ${usd(u.usd)} across ${u.calls} request${u.calls===1?"":"s"}${u.searches ? ` and ${u.searches} web search${u.searches===1?"":"es"}` : ""} (estimated from this app's calls).`);
+  if (!WG.gist){
+    box.innerHTML = `<div class="stack">
+      <div class="field"><label for="wg-token">GitHub token</label><input class="inp" id="wg-token" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="github_pat_…"></div>
+      <button class="btn" data-act="wgConnect">Connect widget</button></div>`;
+    return;
+  }
+  const ago = WG.last ? Math.max(0, Math.round((Date.now() - WG.last)/60000)) : null;
+  box.innerHTML = `<div class="stack">
+    <div class="field"><label>Gist ID <span class="fineprint">· paste this into the widget's Parameter</span></label>
+      <div style="display:flex;gap:8px"><input class="inp num" id="wg-id" readonly value="${esc(WG.gist)}" style="flex:1;min-width:0"><button class="chip on" data-act="wgCopy" style="flex:none">Copy</button></div></div>
+    <p class="fineprint" style="margin:0;color:${WG.err ? "var(--warn)" : "var(--muted)"}">${WG.err ? esc(WG.err) : ago == null ? "Not synced yet." : `Last synced ${ago === 0 ? "just now" : ago + " min ago"}. It updates a few seconds after every change.`}</p>
+    <div class="btn-row"><button class="btn alt" data-act="wgSync">Sync now</button><button class="btn ghost" data-act="wgDisconnect">Disconnect</button></div></div>`;
+}
+document.addEventListener("visibilitychange", () => { if (document.hidden) pushWidget(); else pushWidgetSoon(); });
+setTimeout(() => pushWidget(), 1500);
+
 /* ---------- Actions ---------- */
 function setTab(t){
   S.tab = t; closeMenu(); ["foods","more"].forEach(closeSubs);
@@ -3043,7 +3161,7 @@ document.addEventListener("click", async e => {
   const ph = e.target.closest("[data-phase]"); if (ph){ if (S.body.phase !== ph.dataset.phase){ S.body.phase = ph.dataset.phase; saveBody(); renderProgress(); toast(`Phase: ${ph.textContent}. The coach and suggestions now follow it.`); } return; }
   const rg = e.target.closest("[data-range]"); if (rg){ S.wRange = +rg.dataset.range; renderProgress(); return; }
   const listBtn = e.target.closest("[data-list]"); if (listBtn) return openList(listBtn.dataset.list);
-  const subBtn = e.target.closest("[data-sub]"); if (subBtn){ openSub(S.tab, subBtn.dataset.sub); renderMore(); renderLook(); return; }
+  const subBtn = e.target.closest("[data-sub]"); if (subBtn){ openSub(S.tab, subBtn.dataset.sub); renderMore(); renderLook(); renderWidgetPage(); return; }
   const a = e.target.closest("[data-act]");
   if (!e.target.closest(".menu") && !(a && a.dataset.act === "dayMenu")) closeMenu();
   if (!a) return;
@@ -3080,6 +3198,10 @@ document.addEventListener("click", async e => {
       if (rt > 0){ if (S.body.phase === "bulk") S.body.rate.bulk = Math.min(1.5, rt); else S.body.rate.cut = Math.min(2.5, rt); }
       S.targets = T; Store.save("settings"); saveBody(); renderProgress(); renderMore(); toast("Goal and targets saved"); break;
     }
+    case "wgConnect": connectWidget($("#wg-token").value); break;
+    case "wgSync": pushWidget(true).then(ok => toast(ok ? "Widget data synced" : (WG.err || "Sync failed"))); break;
+    case "wgCopy": { const v = WG.gist; (navigator.clipboard ? navigator.clipboard.writeText(v) : Promise.reject()).then(() => toast("Gist ID copied"), () => { const i = $("#wg-id"); i.select(); toast("Select and copy the ID"); }); break; }
+    case "wgDisconnect": { if (!a.dataset.armed){ a.dataset.armed = "1"; a.textContent = "Tap again to disconnect"; break; } WG = {token:"", gist:"", last:0, err:""}; saveWG(); renderWidgetPage(); toast("Widget disconnected"); break; }
     case "bgPick": pickBg(); break;
     case "bgClear": clearBg(); toast("Default background"); break;
     case "toggleClearTop": {
