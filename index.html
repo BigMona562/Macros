@@ -141,6 +141,11 @@ svg{display:block}
 .inp{width:100%;background:var(--field);border:0;border-radius:14px;padding:13px 14px;font-size:16px;font-weight:600}
 .inp::placeholder{color:var(--dim);font-weight:500}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid2>*,.grid3>*{min-width:0}
+.inp{min-width:0;max-width:100%}
+input[type=date].inp{-webkit-appearance:none;appearance:none;display:block;width:100%;min-height:50px;text-align:left;line-height:1.2}
+input[type=date].inp::-webkit-date-and-time-value{text-align:left;margin:0}
+input[type=date].inp::-webkit-calendar-picker-indicator{margin:0}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;font-weight:600}
 .sw{width:50px;height:30px;border-radius:15px;background:var(--track);position:relative;flex:none;transition:background .2s}
@@ -271,6 +276,60 @@ body,.top,.band,.tabbar,.fcard,.panel,.mlist,.lrows,.vtop,.subhead,.sheet .pane,
 .swatch.custom input{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer}
 .bg-prev{height:150px;border-radius:16px;background:var(--bg) center/cover no-repeat;border:1px solid var(--line);display:grid;place-items:center;color:var(--muted);font-weight:600;overflow:hidden;transition:background-image .3s}
 input[type=range]{width:100%;accent-color:var(--accent)}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:var(--field);border-radius:14px;padding:4px;margin-top:12px}
+.seg button{padding:10px 4px;border-radius:10px;font-weight:800;font-size:14.5px;color:var(--muted);transition:background-color .2s,color .2s}
+.seg button.on{background:var(--accent);color:var(--on-accent)}
+.coach .state{display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:12.5px;letter-spacing:.09em;color:var(--tone);background:color-mix(in srgb, var(--tone) 16%, transparent);padding:6px 11px;border-radius:999px}
+.coach .state i{width:8px;height:8px;border-radius:50%;background:var(--tone)}
+.coach-h{margin:10px 0 4px!important;font-size:19px!important;letter-spacing:0!important;text-transform:none!important;color:var(--text)!important;font-weight:800!important;text-wrap:balance}
+.coach-p{margin:0 0 6px;color:var(--muted);font-size:14.5px;line-height:1.45}
+.coach-acts{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.stat .u{font-size:13px;color:var(--muted);font-weight:700}
+.tdee-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.tdee-row b{font-size:28px;font-weight:800;color:var(--energy)}
+.tdee-row .u{font-size:14px;color:var(--muted);font-weight:700}
+.bios{display:flex;gap:4px;flex:none}
+.verdict{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:8px;padding:10px 12px;border-radius:12px;background:var(--field);font-size:15px}
+.verdict .chip{padding:7px 14px}
+.stack{display:flex;flex-direction:column;gap:12px}
+.stack>.btn:last-child{margin-top:6px}
+.evtag{flex:none;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:3px 7px;border-radius:6px;margin-right:6px}
+.seg.seg2{grid-template-columns:1fr 1fr}
+.opt{display:flex;flex-direction:column;gap:4px;text-align:left;padding:13px 14px;border-radius:14px;background:var(--field);border:2px solid transparent}
+.opt span{color:var(--muted);font-size:14px;line-height:1.4}
+.opt.on{border-color:var(--accent)}
+.up-row{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid rgba(255,255,255,.07)}
+.up-row:first-of-type{border-top:0}
+.up-acts{display:flex;flex-direction:column;gap:6px;flex:none}
+.up-acts .chip{padding:7px 12px;font-size:13px}
+#pl-ev .chip.on{background:var(--accent);color:var(--on-accent)}
+ol.plan{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;color:var(--muted);font-size:14.5px;line-height:1.45}
+ol.plan b{color:var(--text)}
+.ev-row{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-top:10px}
+#ch-ev .chip.on{background:var(--accent);color:var(--on-accent)}
+.ch-ta{min-height:84px;resize:vertical;line-height:1.4;font-family:inherit}
+.thumbs{display:flex;gap:8px;flex-wrap:wrap}
+.thumbs .th{width:64px;height:64px;border-radius:12px;background:center/cover no-repeat var(--field);position:relative}
+.thumbs .th button{position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;background:var(--card-hi);display:grid;place-items:center}
+.est-box{background:var(--field);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.est-box .row{display:flex;justify-content:space-between;gap:10px;font-size:14px}
+.est-box .row span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.est-box .row>span:last-child{flex:none;white-space:nowrap}
+.est-box .tot{border-top:1px solid var(--line);padding-top:8px;font-weight:800}
+.hint{margin:-2px 0 0;color:var(--muted);font-size:13px;line-height:1.4}
+.daygrid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.dchip{aspect-ratio:1;max-width:100%;border-radius:12px;background:var(--field);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;font-weight:800;font-size:15px;position:relative;transition:background-color .15s}
+.dchip small{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.04em}
+.dchip.on{background:var(--accent);color:var(--on-accent)}
+.dchip.on small{color:inherit;opacity:.8}
+.dchip.today{box-shadow:inset 0 0 0 1.5px var(--line)}
+.dchip.tagged::after{content:"";position:absolute;bottom:5px;width:5px;height:5px;border-radius:50%;background:var(--teal)}
+.dchip.on.tagged::after{background:var(--on-accent)}
+.bio{width:9px;height:9px;border-radius:50%;display:block}
+.chips.rate{display:grid;grid-template-columns:repeat(5,1fr)}
+.chips.rate .chip{text-align:center;padding:10px 0}
+#wRange .chip{padding:7px 11px;font-size:13px}
+#wRange .chip.on,.chips.rate .chip.on{background:var(--accent);color:var(--on-accent)}
 .cam{position:relative;width:100%;aspect-ratio:3/4;max-height:52vh;border-radius:18px;overflow:hidden;background:#000;flex:none}
 .cam video{width:100%;height:100%;object-fit:cover;display:block}
 .reticle{position:absolute;left:10%;right:10%;top:33%;bottom:33%;border:3px solid var(--accent);border-radius:14px;box-shadow:0 0 0 999px rgba(0,0,0,.38)}
@@ -334,9 +393,42 @@ body::before{z-index:2;-webkit-backdrop-filter:blur(var(--blur,16px)) saturate(1
 
   <!-- DISCOVER -->
   <section class="view" id="v-discover" hidden>
-    <div class="vhead"><h2>Last 7 days</h2></div>
-    <p class="vsub" id="discSub"></p>
-    <div class="panel"><h3>Energy vs target</h3><div id="chart" style="overflow-x:auto"></div></div>
+    <div class="vtop" style="display:block">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px"><h2>Progress</h2>
+        <button class="iconbtn" data-act="editProfile" aria-label="Your stats"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></button></div>
+      <div class="seg" id="phaseSeg" role="group" aria-label="Phase"><button data-phase="cut">Cutting</button><button data-phase="maintain">Maintaining</button><button data-phase="bulk">Bulking</button></div>
+    </div>
+    <div class="panel coach" id="coachCard"></div>
+    <div class="panel">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px"><span class="fineprint" id="todayW" style="font-size:15px;color:var(--text)"></span><button class="btn" style="width:auto;padding:11px 16px;font-size:15px" data-act="logWeight">Log weigh-in</button></div>
+      <button class="btn alt" style="margin:-4px 0 14px;padding:11px" data-act="logCheat">Log cheat meals or days</button>
+      <div class="stat-grid" id="wStats"></div>
+    </div>
+    <div class="panel"><div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px"><h3 style="margin:0">Weight trend</h3>
+      <div class="chips" id="wRange"><button class="chip" data-range="14">2W</button><button class="chip" data-range="30">1M</button><button class="chip" data-range="90">3M</button><button class="chip" data-range="365">1Y</button></div></div>
+      <div id="wChart" style="overflow-x:auto"></div>
+      <p class="fineprint" style="margin:8px 0 0">Dots are daily weigh-ins and the line is your 7-day average. Rings are post-cheat water readings, left out of the average. Markers at the top are cheat or high days.</p></div>
+    <div class="panel" id="upcomingCard" hidden></div>
+    <div class="panel" id="planCard" hidden></div>
+    <div class="panel"><h3>This week</h3><div id="weekBox"></div></div>
+    <div class="panel"><div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px"><h3 style="margin:0">Expenditure</h3><button class="txtbtn" data-act="editProfile">Your stats</button></div><div id="tdeeBox"></div></div>
+    <div class="panel"><h3>Goal and daily targets</h3><div class="stack">
+      <div class="grid2">
+        <div class="field"><label for="p-goal">Goal weight (lb)</label><input class="inp num" id="p-goal" inputmode="decimal" placeholder="e.g. 165"></div>
+        <div class="field" id="p-rate-wrap"><label for="p-rate" id="p-rate-lab">Loss per week (lb)</label><input class="inp num" id="p-rate" inputmode="decimal"></div>
+      </div>
+      <p class="fineprint" id="sugLine" style="margin:0;color:var(--text)"></p>
+      <button class="btn alt" id="pApply" data-act="coach_applySuggest">Apply suggested calories</button>
+      <div class="grid2">
+        <div class="field"><label for="p-kcal">Energy (kcal)</label><input class="inp num" id="p-kcal" inputmode="decimal"></div>
+        <div class="field"><label for="p-protein">Protein (g)</label><input class="inp num" id="p-protein" inputmode="decimal"></div>
+        <div class="field"><label for="p-net">Net carbs (g)</label><input class="inp num" id="p-net" inputmode="decimal"></div>
+        <div class="field"><label for="p-fat">Fat (g)</label><input class="inp num" id="p-fat" inputmode="decimal"></div>
+      </div>
+      <button class="btn" data-act="saveProgressTargets">Save goal and targets</button>
+    </div></div>
+    <div class="panel"><h3>Check-ins</h3><p class="fineprint" style="margin:-4px 0 6px">Dots: sleep · stress · gym · drive (green good, red poor)</p><div class="lrows" id="wHist" style="background:transparent"></div></div>
+    <div class="panel"><h3>Calories, last 7 days</h3><p class="fineprint" id="discSub" style="margin:0 0 8px"></p><div id="chart" style="overflow-x:auto"></div></div>
     <div class="panel"><h3>Daily averages (logged days)</h3><div class="stat-grid" id="avgs"></div></div>
   </section>
 
@@ -476,6 +568,7 @@ body::before{z-index:2;-webkit-backdrop-filter:blur(var(--blur,16px)) saturate(1
 <input type="file" id="fileLabel" accept="image/*" hidden>
 <input type="file" id="fileShots" accept="image/*" multiple hidden>
 <input type="file" id="fileImport" accept="application/json,.json" hidden>
+<input type="file" id="fileCheat" accept="image/*" multiple hidden>
 <input type="file" id="fileBg" accept="image/*" hidden>
 <div id="bgHost" aria-hidden="true"><div id="bgDim"></div></div>
 <div id="sheets"></div>
@@ -651,6 +744,7 @@ function totals(entries){
   t.net = Math.max(0, t.c - t.fib); return t;
 }
 function amountText(e){
+  if (e.est) return e.qty && e.qty !== 1 ? `${fx(e.qty)} × estimate` : "Estimate";
   if (e.unit === "g") return fx(e.qty)+" g";
   if (["oz","ml","floz"].includes(e.unit)) return fx(e.qty)+" "+e.ulabel;
   return fx(e.qty)+" "+e.ulabel+" ("+Math.round(e.grams)+" g)";
@@ -667,11 +761,11 @@ function portionLine(food){
 const Store = {
   local(){
     try { const raw = localStorage.getItem(LS_KEY); if (!raw) return; const o = JSON.parse(raw);
-      Object.assign(S.targets, o.targets||{}); S.foods = o.foods||{}; S.barcodes = o.barcodes||{}; S.recent = o.recent||[]; S.days = o.days||{}; S.biMicros = o.biMicros||{};
+      Object.assign(S.targets, o.targets||{}); S.foods = o.foods||{}; S.barcodes = o.barcodes||{}; S.recent = o.recent||[]; S.days = o.days||{}; S.biMicros = o.biMicros||{}; S.body = bodyNorm(o.body);
     } catch(e){}
   },
   saveLocal(){
-    try { localStorage.setItem(LS_KEY, JSON.stringify({targets:S.targets, foods:S.foods, barcodes:S.barcodes, recent:S.recent, days:S.days, biMicros:S.biMicros})); }
+    try { localStorage.setItem(LS_KEY, JSON.stringify({targets:S.targets, foods:S.foods, barcodes:S.barcodes, recent:S.recent, days:S.days, biMicros:S.biMicros, body:S.body})); }
     catch(e){ toast("Phone storage is full. Export a backup."); }
   },
   save(){ clearTimeout(this.t); this.t = setTimeout(() => this.saveLocal(), 250); },
@@ -744,7 +838,8 @@ function offToFood(p){
   const n = p.nutriments || {};
   let kcal = parseFloat(n["energy-kcal_100g"]);
   if (!isFinite(kcal)){ const kj = parseFloat(n["energy-kj_100g"] ?? n["energy_100g"]); kcal = isFinite(kj) ? kj/4.184 : NaN; }
-  const name = String(p.product_name||"").trim();
+  const name = String(p.product_name || p.product_name_en || "").trim();
+  if (Array.isArray(p.brands)) p.brands = p.brands.join(",");
   if (!isFinite(kcal) || !name) return null;
   const ss = String(p.serving_size||"").trim(), sq = parseFloat(p.serving_quantity);
   const liquid = /\bml\b|fl\.?\s?oz|\bcl\b/i.test(ss) || String(p.product_quantity_unit||"").toLowerCase() === "ml";
@@ -770,15 +865,26 @@ async function lookupOFF(code){
   }
   return partial ? {partial} : null;
 }
+/* Product search: the newer Search-a-licious service first, the legacy endpoint as a fallback.
+   Open Food Facts allows about 10 searches a minute, so failures stay quiet (web search still works). */
+async function fetchJSON(url, ms){
+  const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), ms);
+  try { const r = await fetch(url, {signal:ctl.signal}); if (!r.ok) throw r.status; return await r.json(); }
+  finally { clearTimeout(t); }
+}
 async function searchOFF(){
   const q = searchCtx.q.trim(); if (!q) return;
-  searchCtx.offBusy = true; searchCtx.offResults = null; renderResults();
-  try {
-    const r = await fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(q)}&search_simple=1&action=process&json=1&page_size=24&sort_by=unique_scans_n&fields=${OFF_FIELDS}`);
-    if (!r.ok) throw r.status;
-    const j = await r.json();
-    searchCtx.offResults = (j.products||[]).map(offToFood).filter(Boolean).slice(0,15);
-  } catch(e){ searchCtx.offResults = []; toast(e === 429 || e === 503 ? "Product search is busy. Wait a minute and try again." : "Couldn't reach the product database. Check your connection."); }
+  searchCtx.offBusy = true; searchCtx.offResults = null; searchCtx.offErr = null; renderResults();
+  const tries = [
+    async () => (await fetchJSON(`https://search.openfoodfacts.org/search?q=${encodeURIComponent(q)}&page_size=24&fields=${OFF_FIELDS}`, 9000)).hits,
+    async () => (await fetchJSON(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(q)}&search_simple=1&action=process&json=1&page_size=24&sort_by=unique_scans_n&fields=${OFF_FIELDS}`, 12000)).products,
+  ];
+  let list = null, lastErr = null;
+  for (const t of tries){
+    try { const r = await t(); if (Array.isArray(r)){ list = r; if (r.length) break; } } catch(e){ lastErr = e; }
+  }
+  if (list) searchCtx.offResults = list.map(offToFood).filter(Boolean).slice(0,15);
+  else { searchCtx.offResults = []; searchCtx.offErr = lastErr === 429 ? "busy" : "down"; }
   searchCtx.offBusy = false;
   if (q === searchCtx.q.trim()) renderResults();
 }
@@ -831,6 +937,11 @@ function dateLabel(k){
   return keyToDate(k).toLocaleDateString(undefined,{month:"short", day:"numeric"});
 }
 
+function targetsFor(k){
+  const sc = S.body && S.body.sched && S.body.sched[k];
+  if (!sc || !(sc.delta > 0)) return S.targets;
+  return {...S.targets, kcal: S.targets.kcal - sc.delta, net: Math.max(30, Math.round(S.targets.net - sc.delta/4))};
+}
 function barRow(label, val, target, unit, color, dec=1){
   const pct = target > 0 ? val/target*100 : 0;
   const rem = target - val, F = v => dec ? f1(v) : String(Math.round(v));
@@ -842,7 +953,7 @@ function barRow(label, val, target, unit, color, dec=1){
 }
 
 function renderSummary(){
-  const d = day(), t = totals(d.entries), T = S.targets;
+  const d = day(), t = totals(d.entries), T = targetsFor(S.date);
   $("#page0").innerHTML = barRow("Energy", t.kcal, T.kcal, "kcal", "var(--energy)") + barRow("Protein", t.p, T.protein, "g", "var(--protein)")
     + barRow("Net Carbs", t.net, T.net, "g", "var(--carbs)") + barRow("Fat", t.f, T.fat, "g", "var(--fat)");
   const pc = t.p*4, cc = t.net*4, fc = t.f*9, sum = pc+cc+fc;
@@ -901,6 +1012,7 @@ function renderDiary(){ renderHeader(); renderSummary(); renderBands(); }
 
 /* ---------- Rendering: other tabs ---------- */
 async function renderDiscover(){
+  try { renderProgress(); } catch(e){ console.error(e); }
   const keys = Array.from({length:7}, (_,i) => shiftKey(S.date, i-6));
   const draw = () => {
     const vals = keys.map(k => totals((S.days[k]||{entries:[]}).entries));
@@ -930,8 +1042,9 @@ async function renderDiscover(){
       + st("Net carbs", avg("net"), "g", S.targets.net, "var(--carbs)") + st("Fat", avg("f"), "g", S.targets.fat, "var(--fat)");
   };
   draw();
-  await Promise.all(keys.map(k => Store.loadDay(k)));
-  if (S.tab === "discover") draw();
+  const more = Array.from({length:28}, (_,i) => shiftKey(todayKey(), -i));
+  for (let i = 0; i < more.length; i += 4) await Promise.all(more.slice(i, i+4).map(k => Store.loadDay(k)));
+  if (S.tab === "discover"){ draw(); try { renderProgress(); } catch(e){} }
 }
 
 const LIST_CFG = {
@@ -977,7 +1090,7 @@ function renderMore(){
   $("#aiStatus").innerHTML = AI.key ? `<b style="color:var(--protein)">On.</b> Look up, label reading, screenshot import and recipe photos are available.` : `<b>Off.</b> Search, live barcode scanning and Open Food Facts work without a key.`;
 }
 function exportData(){
-  const data = JSON.stringify({app:"macro-diary", v:1, exported:new Date().toISOString(), targets:S.targets, foods:S.foods, barcodes:S.barcodes, recent:S.recent, days:S.days, biMicros:S.biMicros});
+  const data = JSON.stringify({app:"macro-diary", v:1, exported:new Date().toISOString(), targets:S.targets, foods:S.foods, barcodes:S.barcodes, recent:S.recent, days:S.days, biMicros:S.biMicros, body:S.body});
   const name = `macro-diary-${dayKey(new Date())}.json`;
   const file = new File([data], name, {type:"application/json"});
   if (navigator.canShare && navigator.canShare({files:[file]})){ navigator.share({files:[file], title:"Mona's Macros backup"}).catch(() => {}); return; }
@@ -991,6 +1104,7 @@ async function importData(){
     if (!o || o.app !== "macro-diary" || typeof o.days !== "object") throw 0;
     if (o.targets) S.targets = {...S.targets, ...o.targets};
     S.foods = {...S.foods, ...(o.foods||{})}; S.barcodes = {...S.barcodes, ...(o.barcodes||{})}; S.biMicros = {...S.biMicros, ...(o.biMicros||{})};
+    if (o.body){ const nb = bodyNorm(o.body); S.body = {...nb, logs:{...S.body.logs, ...nb.logs}}; }
     S.recent = [...new Set([...S.recent, ...(o.recent||[])])].slice(0,40);
     let n = 0;
     for (const [k, d] of Object.entries(o.days)){
@@ -1130,7 +1244,7 @@ function renderResults(){
     if (searchCtx.offBusy) html += `<div class="sec-label">Packaged products</div><div class="spin"></div>`;
     else if (searchCtx.offResults){
       html += `<div class="sec-label">Packaged products</div>`;
-      html += searchCtx.offResults.length ? `<div>${searchCtx.offResults.map((f,i) => foodRowHTML(f, "pickOff").replace(`data-id="${esc(f.id)}"`, `data-i="${i}"`)).join("")}</div>` : `<p class="fineprint" style="margin:0">No packaged products matched “${esc(q)}”.</p>`;
+      html += searchCtx.offResults.length ? `<div>${searchCtx.offResults.map((f,i) => foodRowHTML(f, "pickOff").replace(`data-id="${esc(f.id)}"`, `data-i="${i}"`)).join("")}</div>` : `<p class="fineprint" style="margin:0">${searchCtx.offErr === "busy" ? "Product search is busy for a minute (Open Food Facts limits searches). Try again shortly, or use the web search below." : searchCtx.offErr ? "Product search isn't responding right now. Use the web search below, or scan the barcode instead." : `No packaged products matched “${esc(q)}”.`}</p>`;
     } else if (q.length >= 2){
       html += `<button class="ask" data-act="searchOFF"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7 12 3l9 4-9 4z"/><path d="M3 7v10l9 4 9-4V7M12 11v10"/></svg>
         <div><b>Search packaged products</b><small>Brands and store items from Open Food Facts</small></div></button>`;
@@ -1934,7 +2048,7 @@ Return ONLY JSON {"foods":[{"i":number,${MICRO_SPEC}}]}`, {modelTier:"default"})
 }
 
 /* ---------- Repair saved recipes/meals whose serving sizes or nutrition went missing ---------- */
-const APP_VERSION = "2026.10.21-25";
+const APP_VERSION = "2026.10.23-6";
 function repairFoods(){
   let fixed = 0;
   for (const f of Object.values(S.foods)){
@@ -2097,6 +2211,813 @@ document.addEventListener("change", e => { if (e.target.matches("[data-accent-cu
 applyColors();
 if (LOOK.bg) IDB.get("bg").then(b => b ? showBg(b) : (LOOK.bg = false, saveLook())).catch(() => {});
 
+/* ---------- Progress coach: weight trend, adaptive TDEE and phase decisions ---------- */
+const KCAL_PER_LB = 3500;            // energy in a pound of mixed body tissue (an approximation; early water shifts add noise)
+const BODY_DEF = {phase:"cut", goal:null, rate:{cut:1, bulk:0.5}, profile:{sex:"", age:null, heightIn:68.5, steps:10000, liftDays:4}, logs:{}, refeed:null, sched:{}, plans:[]};
+function bodyNorm(b){
+  b = b && typeof b === "object" ? b : {};
+  const o = {...BODY_DEF, ...b};
+  o.rate = {...BODY_DEF.rate, ...(b.rate||{})};
+  o.profile = {...BODY_DEF.profile, ...(b.profile||{})};
+  o.logs = b.logs && typeof b.logs === "object" ? b.logs : {};
+  o.sched = b.sched && typeof b.sched === "object" ? b.sched : {};
+  o.plans = Array.isArray(b.plans) ? b.plans : [];
+  if (!["cut","maintain","bulk"].includes(o.phase)) o.phase = "cut";
+  return o;
+}
+const ckey = d => d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const cdate = k => { const [y,m,d] = k.split("-").map(Number); return new Date(y, m-1, d); };
+const cshift = (k, n) => { const d = cdate(k); d.setDate(d.getDate()+n); return ckey(d); };
+const cdiff = (a, b) => Math.round((cdate(b) - cdate(a)) / 864e5);   // days from a to b
+const cmean = a => a.length ? a.reduce((x,y) => x+y, 0)/a.length : null;
+const cmedian = a => { if (!a.length) return null; const s = [...a].sort((x,y) => x-y), m = s.length >> 1; return s.length % 2 ? s[m] : (s[m-1]+s[m])/2; };
+function slopePerDay(pts){ // least squares, pts = [[x,y]]
+  if (pts.length < 2) return null;
+  const mx = cmean(pts.map(p => p[0])), my = cmean(pts.map(p => p[1]));
+  let n = 0, d = 0; pts.forEach(([x,y]) => { n += (x-mx)*(y-my); d += (x-mx)*(x-mx); });
+  return d ? n/d : null;
+}
+/* 7-day rolling average of logged weigh-ins, for every day from the first weigh-in to `end` */
+function weightSeries(body, end, water){
+  const keys = Object.keys(body.logs).filter(k => body.logs[k] && body.logs[k].w > 0 && k <= end).sort();
+  if (!keys.length) return [];
+  const out = [], wet = water || {};
+  for (let k = keys[0]; k <= end; k = cshift(k, 1)){
+    const win = []; for (let i = 0; i < 7; i++){ const kk = cshift(k, -i), l = body.logs[kk]; if (l && l.w > 0 && !wet[kk]) win.push(+l.w); }
+    const l = body.logs[k];
+    out.push({k, w: l && l.w > 0 ? +l.w : null, avg: win.length ? cmean(win) : null, water: !!wet[k]});
+  }
+  return out;
+}
+/* Group cheat / high days into episodes and find the weigh-ins they inflate.
+   Window: the morning after the first day through 4 days after the last day.
+   A weigh-in in that window more than 0.3 lb above the pre-cheat average is marked as water. */
+function cheatEpisodes(body, intake, today, T){
+  const tagged = Object.keys(body.logs).filter(k => k <= today && cdiff(k, today) <= 35 && Array.isArray(body.logs[k].ev) && body.logs[k].ev.length);
+  const lastW = Object.keys(body.logs).filter(k => body.logs[k].w > 0).sort().pop();
+  const f = lastW ? formulaTDEE(body, +body.logs[lastW].w) : null;
+  const ref = Math.max(T.kcal || 0, f ? f.tdee : 0);
+  const days = new Set(tagged);
+  for (let i = 0; i <= 35; i++){ const k = cshift(today, -i); if (ref && intake[k] >= ref + 500) days.add(k); }
+  const sorted = [...days].sort(), eps = [];
+  sorted.forEach(k => { const e = eps[eps.length-1]; if (e && cdiff(e.last, k) <= 1){ e.last = k; e.days.push(k); } else eps.push({first:k, last:k, days:[k]}); });
+  const water = {};
+  eps.forEach((e, i) => {
+    const pre = []; for (let d = 0; d <= 7; d++){ const k = cshift(e.first, -d), l = body.logs[k]; if (l && l.w > 0 && !water[k]) pre.push(+l.w); }
+    e.pre = pre.length ? cmean(pre) : null;
+    e.winEnd = cshift(e.last, 4);
+    e.ins = [];
+    for (let k = cshift(e.first, 1); k <= e.winEnd && k <= today; k = cshift(k, 1)){
+      const l = body.logs[k]; if (!(l && l.w > 0)) continue;
+      const up = e.pre != null ? +l.w - e.pre : null;
+      e.ins.push({k, w:+l.w, up});
+      if (up != null && up > 0.3) water[k] = i + 1;
+    }
+    const after = e.ins.filter(x => x.k > e.last);
+    const back = after.find(x => x.up != null && x.up <= 0.3);
+    e.cleared = back ? back.k : null;
+    e.peak = e.ins.length ? e.ins.reduce((a,x) => x.up > a.up ? x : a, e.ins[0]) : null;
+    e.types = [...new Set(e.days.flatMap(k => (body.logs[k] && body.logs[k].ev) || ["high_day"]))];
+    e.extra = e.days.reduce((a,k) => a + (+((body.logs[k]||{}).evKcal) || 0), 0);
+  });
+  return {eps, water};
+}
+const avgAt = (ser, k) => { const p = ser.find(x => x.k === k); return p ? p.avg : null; };
+function formulaTDEE(body, weightLb){
+  const P = body.profile; if (!(weightLb > 0)) return null;
+  const kg = weightLb * 0.4536, cm = (+P.heightIn || 68) * 2.54, age = +P.age || 30;
+  const sexK = P.sex === "male" ? 5 : P.sex === "female" ? -161 : -78;
+  const bmr = 10*kg + 6.25*cm - 5*age + sexK;                                   // Mifflin-St Jeor
+  const steps = +P.steps || 6000, lift = Math.min(7, +P.liftDays || 0);
+  const stepK = Math.max(0, steps - 3000) * 0.00035 * kg;                       // ≈ net cost of walking above daily baseline
+  const liftK = lift * 220 / 7;                                                  // ≈ 220 kcal per lifting session, averaged over the week
+  return {bmr, tdee: bmr*1.2 + stepK + liftK};
+}
+/* Intake per day from the diary: complete days only, so half-logged days don't drag the estimate down */
+function intakeDays(intake, from, to, target){
+  const min = Math.max(800, (target||2000) * 0.45), out = [];
+  for (let k = from; k <= to; k = cshift(k, 1)){ const v = intake[k]; if (v >= min) out.push({k, kcal:v}); }
+  return out;
+}
+function bioScore(l){ const v = []; if (l.sleep) v.push(+l.sleep); if (l.stress) v.push(6 - l.stress); if (l.gym) v.push(+l.gym); if (l.libido) v.push(+l.libido); return v.length ? cmean(v) : null; }
+function coach(bodyIn, intake, today, targets){
+  const body = bodyNorm(bodyIn), T = targets || {};
+  const CE = cheatEpisodes(body, intake, today, T);
+  const ser = weightSeries(body, today, CE.water);
+  const weighIns = ser.filter(p => p.w != null);
+  const now = avgAt(ser, today) ?? (weighIns.length ? cmean(weighIns.slice(-7).map(p => p.w)) : null);
+  const span = weighIns.length ? cdiff(weighIns[0].k, today) : 0;
+  const R = {ser, now, span, weighIns:weighIns.length, phase:body.phase, notes:[], waterDays:CE.water};
+
+  // weekly rate from the 7-day average over the last 14 days (or what exists)
+  const win = Math.min(14, Math.max(7, span));
+  const pts = ser.filter(p => p.avg != null && cdiff(p.k, today) <= win).map(p => [-cdiff(p.k, today), p.avg]);
+  const s = pts.length >= 4 && span >= 6 ? slopePerDay(pts) : null;
+  R.rate = s == null ? null : s * 7;
+
+  // expenditure: starting formula, then the observed one from intake vs weight change
+  const f = formulaTDEE(body, now || 0);
+  R.formula = f ? f.tdee : null; R.bmr = f ? f.bmr : null;
+  const W = Math.min(28, span);
+  const days = W >= 7 ? intakeDays(intake, cshift(today, -W+1), today, T.kcal) : [];
+  const wpts = ser.filter(p => p.avg != null && cdiff(p.k, today) < W).map(p => [-cdiff(p.k, today), p.avg]);
+  let obs = null;
+  if (days.length >= 5 && wpts.length >= 5){
+    const slope = slopePerDay(wpts);
+    if (slope != null) obs = cmean(days.map(d => d.kcal)) - slope * KCAL_PER_LB;
+  }
+  if (obs != null && f){ // keep it physiologically plausible: adaptation is usually within ~10-20% of predicted
+    const lo = f.tdee*0.8, hi = f.tdee*1.25;
+    if (obs < lo || obs > hi){ R.notes.push("Your logged intake and weight change don't line up with a typical expenditure. Missed or under-logged days are the usual cause."); obs = Math.max(lo, Math.min(hi, obs)); }
+  }
+  R.observed = obs; R.loggedDays = days.length; R.window = W;
+  R.adherence = W >= 7 ? days.length / W : null;
+  const conf = obs == null ? 0 : Math.min(1, days.length/14) * Math.min(1, W/14);
+  R.confidence = conf;
+  R.tdee = obs != null && R.formula ? conf*obs + (1-conf)*R.formula : obs ?? R.formula;
+  if (R.tdee != null) R.tdee = Math.round(R.tdee/10)*10;
+
+  // calorie target for the phase
+  const wt = now || 0, sex = body.profile.sex;
+  if (R.tdee != null){
+    const maxCut = Math.max(0.5, wt * 0.01);                                    // cap loss at ~1% of body weight a week
+    const cut = Math.min(+body.rate.cut || 1, maxCut), bulk = Math.min(+body.rate.bulk || 0.5, 1);
+    let kcal = body.phase === "cut" ? R.tdee - cut*KCAL_PER_LB/7 : body.phase === "bulk" ? R.tdee + bulk*KCAL_PER_LB/7 : R.tdee;
+    const floor = sex === "female" ? 1200 : 1500;
+    if (kcal < floor){ kcal = floor; R.notes.push(`Calories are held at a floor of ${floor} kcal for safety.`); }
+    R.suggest = Math.round(kcal/10)*10;
+    R.targetRate = body.phase === "cut" ? -cut : body.phase === "bulk" ? bulk : 0;
+  }
+
+  // biofeedback, fatigue and waist
+  const recent = n => Object.keys(body.logs).filter(k => k <= today && cdiff(k, today) < n).map(k => body.logs[k]);
+  const r3 = recent(3), r7 = recent(7), base = Object.keys(body.logs).filter(k => cdiff(k, today) >= 7 && cdiff(k, today) < 28).map(k => body.logs[k]);
+  const sc = a => cmean(a.map(bioScore).filter(v => v != null));
+  R.bio = sc(r7); const bioBase = sc(base);
+  R.bioDown = R.bio != null && (R.bio <= 2.5 || (bioBase != null && R.bio <= bioBase - 0.6));
+  const sl = cmean(r3.map(l => +l.sleep).filter(Boolean)), st = cmean(r3.map(l => +l.stress).filter(Boolean));
+  const rhrBase = cmedian(Object.keys(body.logs).filter(k => cdiff(k, today) >= 4 && cdiff(k, today) <= 30).map(k => +body.logs[k].rhr).filter(v => v > 0));
+  const rhrNow = cmean(r3.map(l => +l.rhr).filter(v => v > 0));
+  R.rhrUp = rhrBase != null && rhrNow != null && rhrNow >= rhrBase + 5;
+  R.fatigue = (sl != null && sl <= 2.3) || (st != null && st >= 3.7) || R.rhrUp;
+  const wk = Object.keys(body.logs).filter(k => k <= today && cdiff(k, today) <= 21 && body.logs[k].waist > 0).sort();
+  R.waist = wk.length >= 2 && cdiff(wk[0], wk[wk.length-1]) >= 7 ? body.logs[wk[wk.length-1]].waist - body.logs[wk[0]].waist : null;
+
+  // days of no meaningful progress (0.5 lb on the 7-day average) in the phase's direction
+  R.stalled = null;
+  if (now != null && body.phase !== "maintain"){
+    const dir = body.phase === "cut" ? 1 : -1; let k = 1;
+    for (; k <= span; k++){ const a = avgAt(ser, cshift(today, -k)); if (a != null && dir*(a - now) >= 0.5) break; }
+    R.stalled = k;
+  }
+  // cheat meals/days, salty food, alcohol, refeeds, plus unlogged-as-cheat high days from the diary
+  const EVK = Object.keys(body.logs).filter(k => k <= today && cdiff(k, today) <= 14);
+  const evDays = {};
+  EVK.forEach(k => { const ev = body.logs[k].ev; if (Array.isArray(ev) && ev.length) evDays[k] = {k, types:[...ev], extra:+body.logs[k].evKcal || 0}; });
+  const ref = R.tdee || T.kcal || 0;
+  for (let i = 0; i <= 14; i++){ const k = cshift(today, -i), v = intake[k];
+    if (ref && v >= ref + 500 && !evDays[k]) evDays[k] = {k, types:["high_day"], extra:0, auto:true}; }
+  R.events = Object.values(evDays).sort((a,b) => a.k < b.k ? 1 : -1).map(e => {
+    const eaten = intake[e.k] || 0;
+    const over = eaten ? eaten - (R.tdee || T.kcal || eaten) : e.extra;     // calories above maintenance that day
+    return {...e, eaten, over, fat: Math.max(0, over) / KCAL_PER_LB};
+  });
+  // episodes: calories over maintenance, real fat, water seen on the scale, when it should clear
+  const maint = R.tdee || T.kcal || 0;
+  R.episodes = CE.eps.map(e => {
+    const eaten = e.days.reduce((a,k) => a + (intake[k] || 0), 0), logged = e.days.filter(k => intake[k] > 0).length;
+    const over = e.days.reduce((a,k) => a + (intake[k] ? intake[k] - maint : (+((body.logs[k]||{}).evKcal) || +((body.logs[k]||{}).planOver) || 0)), 0);
+    return {...e, eaten, logged, over, fat: Math.max(0, over) / KCAL_PER_LB, since: cdiff(e.last, today), active: today <= e.winEnd};
+  }).sort((a,b) => a.last < b.last ? 1 : -1);
+  const epi = R.episodes[0];
+  R.water = null;
+  if (epi && epi.since <= 6){
+    const latest = [...epi.ins].reverse().find(x => cdiff(x.k, today) <= 2);
+    R.water = {ep: epi, spike: latest && latest.up != null ? latest.up : null, days: epi.since};
+  }
+  // this week vs expenditure
+  const wkIn = []; for (let i = 0; i < 7; i++){ const k = cshift(today, -i), v = intake[k]; if (v >= Math.max(800, (T.kcal||2000)*0.45)) wkIn.push(v); }
+  R.week = R.tdee && wkIn.length ? {days: wkIn.length, avg: cmean(wkIn), balance: wkIn.reduce((a,v) => a + (v - R.tdee), 0)} : null;
+  if (R.week) R.week.lb = R.week.balance / KCAL_PER_LB;
+  R.decision = decide(R, body, today);
+  // in-range states keep current calories too (your matrix: 0.5-1.5 lb/week on a cut = continue as is)
+  R.hold = ["refeed","refeed_rec","fatigue","hold","hold_recomp","hold_water","water","cheat_rec","baseline","deficit","surplus","maint"].includes(R.decision.code);
+  return R;
+}
+function epLabel(e, EVN){
+  const d1 = cdate(e.first).toLocaleDateString(undefined, {weekday:"short"}), d2 = cdate(e.last).toLocaleDateString(undefined, {weekday:"short"});
+  const t = e.types.includes("cheat_day") ? "cheat day" : e.types.includes("cheat_meal") ? "cheat meal" : e.types.includes("refeed") ? "refeed" : (EVN[e.types[0]] || "high-calorie day");
+  return e.first === e.last ? `${d1} ${t}` : `${d1}–${d2} ${t}${t.endsWith("y") ? "s" : "s"}`;
+}
+/* Is the goal on the right side of the current weight for this phase? */
+function goalDir(phase, now, goal){
+  if (!(goal > 0) || !(now > 0) || phase === "maintain") return null;
+  const d = phase === "cut" ? now - goal : goal - now;          // positive = still to go
+  if (d <= 0 && d >= -1) return "reached";
+  if (d < -1) return "wrong";
+  return "ahead";
+}
+function decide(R, body, today){
+  const D = (code, tone, label, head, why, acts) => ({code, tone, label, head, why, acts: acts || []});
+  if (body.refeed && today >= body.refeed.start && today <= body.refeed.end){
+    const n = cdiff(body.refeed.start, today) + 1, of = cdiff(body.refeed.start, body.refeed.end) + 1;
+    return D("refeed", "info", "REFEED ACTIVE", `Refeed day ${n} of ${of}: eat at maintenance`, "Calories are raised to your maintenance for these days, mostly from carbs. Your cut targets come back automatically when it ends.", ["endRefeed"]);
+  }
+  const EVN = {cheat_meal:"cheat meal", cheat_day:"cheat day", salty:"salty / restaurant meal", alcohol:"drinks", carbs:"big carb day", refeed:"refeed", high_day:"high-calorie day"};
+  const W = R.water;
+  if (W){
+    const e = W.ep, what = epLabel(e, EVN);
+    const fat = e.fat >= 0.05 ? `Real fat from it is at most about ${e.fat.toFixed(2)} lb (${Math.round(e.over)} kcal over maintenance). ` : e.logged ? "It was close to maintenance, so it added essentially no fat. " : "Log that food in the diary to see its real impact. ";
+    const clear = cdate(e.winEnd).toLocaleDateString(undefined, {weekday:"long"});
+    if (e.cleared && W.days >= 1)
+      R.notes.push(`Water from the ${what} has cleared: you're back near your pre-cheat weight.`);
+    else if (W.spike != null && W.spike >= 0.5)
+      return D("water", "info", "WATER RETENTION", `Scale up ${W.spike.toFixed(1)} lb from the ${what}`, `That's mostly water, sodium and stored carbs (glycogen), not fat. ${fat}These weigh-ins are left out of your trend until ${clear}, so they won't throw off your rate or expenditure. Follow the game plan below.`);
+    else if (e.active && W.days <= 4)
+      return D("cheat_rec", "info", "CHEAT RECOVERY", `Tracking the ${what}`, `${W.spike == null ? "No weigh-in since yet. Weigh in tomorrow morning as usual; " : W.spike <= 0.3 ? "The scale is already back near your pre-cheat weight. " : `Scale is up ${W.spike.toFixed(1)} lb, a small water bump. `}Until ${clear}, weigh-ins are checked against your pre-cheat ${e.pre != null ? e.pre.toFixed(1) + " lb" : "average"} and any water is left out of your trend. ${fat}`);
+  }
+  if (R.weighIns < 5 || R.span < 6) return D("baseline", "info", "BUILDING BASELINE", "Weigh in every morning for a week", `${R.weighIns} of 7 weigh-ins so far. Morning weight after the bathroom, before food. The coach starts making calls once there's a 7-day trend.`, ["logWeight"]);
+  const r = R.rate ?? 0, wt = R.now || 0, goal = +body.goal || null;
+  const pace = `${r > 0 ? "+" : ""}${r.toFixed(2)} lb/week`;
+  const gdir = goal ? goalDir(body.phase, wt, goal) : null;
+  if (gdir === "reached")
+    return D("goal", "good", "GOAL REACHED", `Your 7-day average hit ${goal} lb`, "Switch to Maintaining to lock it in, or set a new goal weight.", ["toMaintain"]);
+  const stalled = R.stalled ?? 0;
+  if (body.phase === "cut" && Math.abs(r) < 0.5 && stalled >= 14 && R.bioDown && !(R.waist != null && R.waist <= -0.25))
+    return D("refeed_rec", "act", "REFEED RECOMMENDED", `No trend change for ${stalled} days and recovery is slipping`, "Scale and waist are flat while sleep, gym performance or drive are dropping. Two days at maintenance calories (extra carbs, same protein) can restore training quality and clear water. In studies, breaks like this mainly help hunger and adherence; they don't speed up fat loss on their own.", ["startRefeed"]);
+  if (R.fatigue){
+    const why = [R.rhrUp ? "resting heart rate is 5+ bpm above your normal" : null, "recent sleep or stress scores are poor"].filter(Boolean)[0];
+    return D("fatigue", "warn", "FATIGUE WARNING", "Hold calories and prioritize recovery", `Your ${why}. Stress and short sleep raise cortisol, which can make your body hold water and hide fat loss on the scale. Don't cut calories further. Aim for 7–9 hours of sleep, keep steps steady, and consider a lighter gym day.`);
+  }
+  if (body.phase === "cut"){
+    const fast = Math.max(1.5, wt*0.01);
+    if (r <= -fast) return D("fast", "warn", "LOSING TOO FAST", `${pace} is faster than ~1% of your body weight a week`, "Very fast loss raises the risk of losing muscle and stalling your training. Eat about 150–250 kcal more.", ["applySuggest"]);
+    if (r <= -0.5) return D("deficit", "good", "DEFICIT ACTIVE", `Losing ${Math.abs(r).toFixed(2)} lb a week. Continue the cut.`, "This is the optimal fat-loss range. Keep your calories, protein and step target as they are.");
+    const st = R.stalled ?? 0;
+    if (st >= 10 && R.waist != null && R.waist <= -0.25)
+      return D("hold_recomp", "info", "HOLD COURSE", `Scale is flat but your waist is down ${Math.abs(R.waist).toFixed(1)} in`, "That points to fat loss masked by water or muscle gain. Don't cut calories further.");
+    const masked = (R.episodes || []).some(e => e.active && !e.cleared);
+    if (masked && (st >= 10 || r > 0.25)) return D("hold_water", "info", "HOLD COURSE", "Recent high day may be hiding your progress", "A cheat or high-calorie day in the last 5 days can hold 1–4 lb of water. Keep your normal targets and judge the trend again in a few days.");
+    if (st >= 21)
+      return D("plateau", "act", "PLATEAU", `No trend change for ${st} days`, R.adherence != null && R.adherence < 0.8 ? "First, log every day. Missing days make intake look lower than it is." : "Your expenditure estimate has adjusted downward. Apply the updated calories, or add about 2,000 steps a day.", ["applySuggest"]);
+    if (st >= 10) return D("hold", "info", "HOLD COURSE", `Trend flat for ${st} days`, "This is often water retention. Stay consistent for a few more days before changing anything. Logging your waist helps the coach tell water from a real stall.", ["logWeight"]);
+    if (r > 0.25) return D("up", "warn", "TREND RISING", `Trend is up ${pace}`, "Check that every day's food is logged. Salt, carbs, soreness or stress can also push the scale up for a few days.");
+    return D("slow", "info", "CONTINUE CUT", `Losing ${Math.abs(r).toFixed(2)} lb a week, slower than target`, "Still moving the right way. The expenditure estimate keeps adjusting as you log.", ["applySuggest"]);
+  }
+  if (body.phase === "bulk"){
+    if (r >= 1) return D("bulk_fast", "warn", "GAINING TOO FAST", `Gaining ${pace}`, "Faster than about 0.25–0.75 lb a week mostly adds fat. Eat about 150–250 kcal less.", ["applySuggest"]);
+    if (r >= 0.2) return D("surplus", "good", "SURPLUS ACTIVE", `Gaining ${r.toFixed(2)} lb a week`, "A lean-gain pace. Keep training hard and keep protein high.");
+    if ((R.stalled ?? 0) >= 14) return D("bulk_push", "act", "PUSH CALORIES", `No gain for ${R.stalled} days`, "Add about 150 kcal a day (the updated suggestion does this).", ["applySuggest"]);
+    return D("bulk_slow", "info", "HOLD COURSE", `Gaining ${pace}`, "A bit slow, but give it another week before adding calories.");
+  }
+  if (Math.abs(r) <= 0.3) return D("maint", "good", "MAINTAINING", `Stable (${pace})`, "Weight is holding steady. Keep doing what you're doing.");
+  return D("maint_drift", "warn", r > 0 ? "DRIFTING UP" : "DRIFTING DOWN", `Trend ${pace}`, "Apply the updated calories to bring it back to stable.", ["applySuggest"]);
+}
+
+/* ---------- Progress tab UI ---------- */
+S.body = bodyNorm(S.body);
+S.wRange = 30;
+const todayKey = () => dayKey(new Date());
+const fmtW = v => v == null ? "–" : (Math.round(v*10)/10).toFixed(1);
+function intakeMap(){ const m = {}; for (const [k, d] of Object.entries(S.days)) if (d && d.entries && d.entries.length) m[k] = totals(d.entries).kcal; return m; }
+function saveBody(){ try { Store.saveLocal(); } catch(e){} Store.save("body"); }
+let lastCoach = null;
+function startPayback(delta){
+  const today = todayKey(), prev = {...S.targets}, floor = S.body.profile.sex === "female" ? 1200 : 1500;
+  const d = Math.min(delta, Math.max(0, prev.kcal - floor));
+  if (d < 50){ toast("Your calories are already at the safe floor, so there's nothing to pay back."); return; }
+  S.body.payback = {start: today, end: cshift(today, 4), prev, delta: d};
+  S.targets = {...prev, kcal: prev.kcal - d, net: Math.max(30, Math.round(prev.net - d/4))};
+  saveBody(); Store.save("settings"); renderProgress(); renderDiary(); toast(`Payback on: ${S.targets.kcal} kcal for 5 days`);
+}
+function endPayback(silent){
+  const pb = S.body.payback; if (!pb) return;
+  if (pb.prev) S.targets = {...S.targets, ...pb.prev};
+  S.body.payback = null; saveBody(); Store.save("settings");
+  if (!silent){ renderProgress(); renderDiary(); toast("Payback ended. Normal targets are back."); }
+}
+function checkRefeedEnd(){
+  if (S.body.payback && todayKey() > S.body.payback.end){ endPayback(true); toast("Payback finished. Normal targets are back."); }
+  const rf = S.body.refeed; if (!rf) return;
+  if (todayKey() > rf.end){
+    if (rf.prev) S.targets = {...S.targets, ...rf.prev};
+    S.body.refeed = null; saveBody(); Store.save("settings");
+    toast("Refeed finished. Your cut targets are back.");
+  }
+}
+function wChart(R){
+  const days = S.wRange, end = todayKey(), start = cshift(end, -(days-1));
+  const pts = R.ser.filter(p => p.k >= start);
+  if (!pts.some(p => p.w != null)) return `<p class="fineprint" style="margin:0">Your weigh-ins and 7-day average will chart here.</p>`;
+  const goal = +S.body.goal || null;
+  const vals = pts.flatMap(p => [p.w, p.avg]).filter(v => v != null);
+  if (goal && Math.abs(goal - (R.now||goal)) < 8) vals.push(goal);
+  let lo = Math.floor(Math.min(...vals) - 0.5), hi = Math.ceil(Math.max(...vals) + 0.5);
+  if (hi - lo < 4){ const m = (hi+lo)/2; lo = Math.floor(m-2); hi = Math.ceil(m+2); }
+  const W = 340, H = 180, L = 34, Rr = 10, T = 12, B = 24;
+  const x = k => L + (W-L-Rr) * (cdiff(start, k) / Math.max(1, days-1));
+  const y = v => T + (H-T-B) * (1 - (v-lo)/(hi-lo));
+  const ticks = [lo, Math.round((lo+hi)/2), hi];
+  let s = `<svg class="chart" viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Weight and 7-day average, last ${days} days">`;
+  ticks.forEach(t => { s += `<line x1="${L}" x2="${W-Rr}" y1="${y(t)}" y2="${y(t)}" stroke="var(--line)" stroke-width="1" opacity=".5"/><text x="${L-6}" y="${y(t)+4}" text-anchor="end">${t}</text>`; });
+  if (goal && goal >= lo && goal <= hi) s += `<line x1="${L}" x2="${W-Rr}" y1="${y(goal)}" y2="${y(goal)}" stroke="var(--teal)" stroke-width="1.5" stroke-dasharray="5 4"/><text x="${W-Rr}" y="${y(goal)-5}" text-anchor="end" style="fill:var(--teal)">goal ${goal}</text>`;
+  (R.events||[]).filter(e => e.k >= start).forEach(e => { const xx = x(e.k).toFixed(1); s += `<line x1="${xx}" x2="${xx}" y1="${T}" y2="${H-B}" stroke="var(--teal)" stroke-width="1" stroke-dasharray="2 3" opacity=".7"/><circle cx="${xx}" cy="${T+3}" r="3.5" fill="var(--teal)"/>`; });
+  pts.filter(p => p.w != null).forEach(p => { s += p.water
+    ? `<circle cx="${x(p.k).toFixed(1)}" cy="${y(p.w).toFixed(1)}" r="3.4" fill="none" stroke="var(--teal)" stroke-width="1.6"/>`
+    : `<circle cx="${x(p.k).toFixed(1)}" cy="${y(p.w).toFixed(1)}" r="2.6" fill="var(--muted)" opacity=".75"/>`; });
+  const line = pts.filter(p => p.avg != null).map(p => `${x(p.k).toFixed(1)},${y(p.avg).toFixed(1)}`);
+  if (line.length > 1) s += `<polyline points="${line.join(" ")}" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>`;
+  const last = pts.filter(p => p.avg != null).pop();
+  if (last) s += `<circle cx="${x(last.k)}" cy="${y(last.avg)}" r="4.5" fill="var(--accent)" stroke="var(--bg)" stroke-width="2"/>`;
+  const lab = k => cdate(k).toLocaleDateString(undefined, {month:"short", day:"numeric"});
+  s += `<text x="${L}" y="${H-6}">${lab(start)}</text><text x="${W-Rr}" y="${H-6}" text-anchor="end">${lab(end)}</text></svg>`;
+  return s;
+}
+const TONE = {good:"var(--protein)", warn:"var(--warn)", act:"var(--accent)", info:"var(--carbs)"};
+const ACT_LABEL = {logWeight:"Log weigh-in", startRefeed:"Start 48-hour refeed", endRefeed:"End refeed now", applySuggest:"Apply suggested calories", toMaintain:"Switch to Maintaining"};
+const EV_LABEL = {cheat_meal:"Cheat meal", cheat_day:"Cheat day", salty:"Salty / restaurant", alcohol:"Alcohol", carbs:"Big carb day", refeed:"Refeed", high_day:"High-calorie day"};
+function calVerdict(R, D){
+  const cur = Math.round(S.targets.kcal);
+  let txt, tone;
+  const scd = S.body.sched && S.body.sched[todayKey()];
+  if (scd && scd.delta > 0 && D.code !== "refeed") return `<div class="verdict"><b style="color:var(--teal)">Calories today: ${cur - scd.delta} kcal (banking −${scd.delta} for your ${esc(scd.for)})</b></div>`;
+  if (D.code === "refeed"){ txt = `Calories: maintenance (${cur} kcal) until the refeed ends`; tone = "var(--carbs)"; }
+  else if (R.suggest == null || R.hold){ txt = `Calories: keep ${cur} kcal`; tone = "var(--text)"; }
+  else { const d = R.suggest - cur;
+    if (Math.abs(d) < 50){ txt = `Calories: keep ${cur} kcal (on target)`; tone = "var(--protein)"; }
+    else { txt = `Calories: ${d > 0 ? "raise" : "lower"} to ${R.suggest} kcal (${d > 0 ? "+" : ""}${d})`; tone = d > 0 ? "var(--protein)" : "var(--warn)"; } }
+  const showBtn = R.suggest != null && !R.hold && Math.abs(R.suggest - cur) >= 50 && !D.acts.includes("applySuggest") && D.code !== "refeed";
+  return `<div class="verdict"><b style="color:${tone}">${txt}</b>${showBtn ? `<button class="chip on" data-act="coach_applySuggest">Apply</button>` : ""}</div>`;
+}
+function weekHTML(R){
+  const evs = R.events.filter(e => cdiff(e.k, todayKey()) < 7);
+  const evRows = evs.map(e => `<div class="ev-row"><span class="evtag">${(e.types||[]).map(t => EV_LABEL[t] || t).join(" + ")}</span><span class="fineprint num">${cdate(e.k).toLocaleDateString(undefined, {weekday:"short", month:"short", day:"numeric"})}${e.eaten ? ` · ${Math.round(e.eaten)} kcal` : ""}${e.over > 0 ? ` · +${Math.round(e.over)} over maintenance ≈ ${e.fat.toFixed(2)} lb fat max` : ""}</span></div>`).join("");
+  if (!R.week) return `<p class="fineprint" style="margin:0">Log your food in the diary and this shows how the week is going against your expenditure.</p>${evRows}`;
+  const wk = R.week, ph = S.body.phase, lb = wk.lb;
+  const plan = ph === "cut" ? -(+S.body.rate.cut||1) : ph === "bulk" ? (+S.body.rate.bulk||0.5) : 0;
+  const scaled7 = lb * 7 / wk.days;
+  return `<div class="stat-grid">
+      <div class="stat"><b class="num">${Math.round(wk.avg)}<span class="u"> kcal</span></b><small>Avg intake · ${wk.days} logged day${wk.days===1?"":"s"}</small></div>
+      <div class="stat"><b class="num" style="color:${lb < 0 ? "var(--protein)" : "var(--warn)"}">${lb > 0 ? "+" : ""}${lb.toFixed(2)}<span class="u"> lb</span></b><small>Est. fat ${lb < 0 ? "lost" : "gained"} so far</small></div>
+    </div>
+    <p class="fineprint num" style="margin:10px 0 0">At this pace the week lands near ${scaled7 > 0 ? "+" : ""}${scaled7.toFixed(2)} lb (plan ${plan > 0 ? "+" : ""}${plan} lb).${evs.length ? " Cheat and high days are included: they cost real calories, but the scale jump right after is mostly water." : ""}</p>${evRows}`;
+}
+function planHTML(R){
+  const B = S.body, pb = B.payback, today = todayKey();
+  const e = (R.episodes || []).find(x => x.since <= 6);
+  if (!e && !pb) return "";
+  const EVN = {cheat_meal:"cheat meal", cheat_day:"cheat day", salty:"salty meal", alcohol:"drinks", carbs:"big carb day", refeed:"refeed", high_day:"high-calorie day"};
+  const dfmt = k => cdate(k).toLocaleDateString(undefined, {weekday:"short", month:"short", day:"numeric"});
+  let h = `<h3>Game plan${e ? ": " + esc(epLabel(e, EVN)) : ""}</h3>`;
+  if (e){
+    const def = R.tdee ? R.tdee - S.targets.kcal : 0, delay = def > 100 && e.over > 0 ? Math.round(e.over / def) : null;
+    const seen = e.peak && e.peak.up != null ? e.peak.up : null;
+    h += `<div class="stat-grid" style="margin-bottom:12px">
+      <div class="stat"><b class="num">${e.over > 0 ? "+" + Math.round(e.over) : e.logged ? "≈0" : "?"}<span class="u"> kcal</span></b><small>Over maintenance</small></div>
+      <div class="stat"><b class="num" style="color:var(--warn)">${e.fat.toFixed(2)}<span class="u"> lb</span></b><small>Real fat (max)</small></div>
+      <div class="stat"><b class="num">${seen != null ? (seen > 0 ? "+" : "") + seen.toFixed(1) : "–"}<span class="u"> lb</span></b><small>Scale vs pre-cheat ${e.pre != null ? fmtW(e.pre) : ""}</small></div>
+      <div class="stat"><b class="num" style="color:var(--teal)">${e.cleared ? "Cleared" : dfmt(e.winEnd).replace(/,.*/, "")}</b><small>${e.cleared ? "Back to baseline " + dfmt(e.cleared) : "Water expected gone by"}</small></div>
+    </div>`;
+    if (!e.logged && !e.extra) h += `<p class="hint" style="margin-bottom:10px">Add what you ate (Log a cheat meal or day → What did you eat?) to see the real calorie and fat numbers.</p>`;
+    const steps = [];
+    if (!e.cleared) steps.push(`<b>Today: eat your normal targets</b> (${Math.round(S.targets.kcal)} kcal, ${Math.round(S.targets.protein)} g protein). Don't skip meals or slash calories to "undo" it; that drags out the water and hurts training.`);
+    if (!e.cleared) steps.push(`<b>Flush the water:</b> drink 3–4 L, keep sodium normal (not extra salty), and get potassium from fruit, potatoes or leafy greens.`);
+    steps.push(`<b>Move and train as usual:</b> hit your ~${Number(B.profile.steps || 10000).toLocaleString()} steps. The extra stored carbs make for a strong gym session.`);
+    steps.push(`<b>Keep weighing in every morning.</b> Until ${dfmt(e.winEnd)}, any reading more than 0.3 lb over your pre-cheat ${e.pre != null ? fmtW(e.pre) + " lb" : "average"} is marked as water and left out of your trend, rate and expenditure.`);
+    if (delay != null && delay >= 1) steps.push(`<b>Goal impact:</b> about ${delay} day${delay===1?"":"s"} added to your goal date at your current deficit. ${e.days.length > 1 ? `${e.days.length} days` : "One day"} off plan doesn't derail the cut.`);
+    h += `<ol class="plan">${steps.map(x => `<li>${x}</li>`).join("")}</ol>`;
+    const can = B.phase === "cut" && e.over >= 300 && !pb && !B.refeed && e.since <= 3;
+    if (can){ const d = paybackDelta(e.over); h += `<p class="hint" style="margin:10px 0 8px">Optional: earn some of it back gradually instead of in one hard day.</p><button class="btn alt" data-act="startPayback" data-delta="${d}" data-over="${Math.round(e.over)}">Pay it back: −${d} kcal/day for 5 days</button>`; }
+  }
+  if (pb){
+    const n = cdiff(pb.start, today) + 1;
+    h += `<div class="verdict" style="margin-top:12px"><b>Payback day ${Math.min(n,5)} of 5: −${pb.delta} kcal (${Math.round(S.targets.kcal)} today)</b><button class="chip" data-act="endPayback">End</button></div>`;
+  }
+  return h;
+}
+function paybackDelta(over){ return Math.max(50, Math.min(250, Math.round(over / 5 / 10) * 10)); }
+function renderProgress(){
+  checkRefeedEnd();
+  const B = S.body, today = todayKey();
+  const R = coach(B, intakeMap(), today, S.targets); lastCoach = R;
+  const scT = B.sched && B.sched[today];
+  if (scT && scT.delta > 0) R.notes.unshift(`Banking for your planned ${scT.for}: today's target is ${Math.round(S.targets.kcal - scT.delta)} kcal (−${scT.delta}). Your diary shows the lower number.`);
+  document.querySelectorAll("#phaseSeg [data-phase]").forEach(b => b.classList.toggle("on", b.dataset.phase === B.phase));
+  const D = R.decision;
+  $("#coachCard").innerHTML = `<div class="state" style="--tone:${TONE[D.tone]}"><i></i>${D.label}</div>
+    <h3 class="coach-h">${esc(D.head)}</h3><p class="coach-p">${esc(D.why)}</p>
+    ${R.notes.map(n => `<p class="coach-p" style="color:var(--warn)">${esc(n)}</p>`).join("")}
+    ${calVerdict(R, D)}
+    ${D.acts.length ? `<div class="coach-acts">${D.acts.map((a,i) => `<button class="btn${i ? " alt" : ""}" data-act="coach_${a}">${ACT_LABEL[a]}</button>`).join("")}</div>` : ""}`;
+  $("#weekBox").innerHTML = weekHTML(R);
+  const pc = $("#planCard"), ph = planHTML(R); pc.hidden = !ph; pc.innerHTML = ph || "";
+  const uc = $("#upcomingCard"), uh = upcomingHTML(R); uc.hidden = !uh; uc.innerHTML = uh || "";
+
+  const todayLog = B.logs[today];
+  const goal = +B.goal || null, r = R.rate;
+  let eta = "Set a goal weight";
+  const gd = goal && R.now != null ? goalDir(B.phase, R.now, goal) : null;
+  if (gd === "wrong") eta = B.phase === "bulk" ? "Goal is below you. Set a bulk goal" : "Goal is above you. Set a cut goal";
+  else if (goal && R.now != null){
+    const left = R.now - goal;
+    if (Math.abs(left) < 0.3) eta = "At goal";
+    else if (r && Math.sign(r) === -Math.sign(left) && Math.abs(r) >= 0.1){ const wks = Math.abs(left / r), d = new Date(); d.setDate(d.getDate() + Math.round(wks*7)); eta = `${Math.abs(left).toFixed(1)} lb to go · ~${d.toLocaleDateString(undefined, {month:"short", day:"numeric"})}`; }
+    else eta = `${Math.abs(left).toFixed(1)} lb to go`;
+  }
+  const stat = (big, unit, small, col) => `<div class="stat"><b class="num"${col ? ` style="color:${col}"` : ""}>${big}<span class="u"> ${unit}</span></b><small>${small}</small></div>`;
+  $("#wStats").innerHTML = stat(fmtW(R.now), "lb", "7-day average", "var(--text)")
+    + stat(r == null ? "–" : (r > 0 ? "+" : "") + r.toFixed(2), "lb/wk", "Weekly rate", r == null ? "" : (B.phase === "cut" ? (r <= -0.5 ? "var(--protein)" : "var(--warn)") : B.phase === "bulk" ? (r >= 0.2 && r < 1 ? "var(--protein)" : "var(--warn)") : (Math.abs(r) <= 0.3 ? "var(--protein)" : "var(--warn)")))
+    + stat(R.tdee ?? "–", "kcal", "Expenditure (TDEE)", "var(--energy)")
+    + stat(goal ? goal : "–", "lb", eta, "var(--teal)");
+  $("#todayW").innerHTML = todayLog && todayLog.w ? `Today: <b class="num">${fmtW(todayLog.w)} lb</b>` : `No weigh-in yet today`;
+  document.querySelectorAll("#wRange [data-range]").forEach(b => b.classList.toggle("on", +b.dataset.range === S.wRange));
+  $("#wChart").innerHTML = wChart(R);
+  // expenditure card
+  const conf = Math.round(R.confidence*100);
+  $("#tdeeBox").innerHTML = `<div class="tdee-row"><div><b class="num">${R.tdee ?? "–"}</b><span class="u"> kcal/day</span></div><span class="tag">${conf >= 80 ? "High" : conf >= 40 ? "Medium" : "Low"} confidence</span></div>
+    <div class="track thin" style="margin:10px 0 8px"><div class="fill${conf>=99?" full":""}" style="width:${Math.max(3,conf)}%;background:var(--energy)"></div></div>
+    <p class="fineprint num" style="margin:0">Starting estimate ${R.formula ? Math.round(R.formula/10)*10 : "–"} kcal (Mifflin-St Jeor + your steps and lifting)${R.observed != null ? ` · from your data ${Math.round(R.observed/10)*10} kcal` : ""}. ${R.loggedDays} fully logged day${R.loggedDays===1?"":"s"} in the last ${R.window || 0}. The estimate shifts toward your real data as you log weight and food every day.</p>`;
+  // targets
+  const sug = R.suggest, hold = R.hold;
+  $("#sugLine").innerHTML = sug == null ? "Log weigh-ins to get a calorie suggestion."
+    : hold ? `Coach says <b>hold</b> your current calories for now.${B.phase !== "maintain" ? ` (Based on expenditure alone it would be ${sug} kcal.)` : ""}`
+    : `Suggested for ${B.phase === "cut" ? `losing ${Math.abs(R.targetRate)} lb/week` : B.phase === "bulk" ? `gaining ${R.targetRate} lb/week` : "maintaining"}: <b class="num">${sug} kcal</b>${Math.abs(sug - S.targets.kcal) >= 50 ? ` (now ${Math.round(S.targets.kcal)})` : " (you're on it)"}`;
+  $("#pApply").hidden = sug == null || hold || Math.abs(sug - S.targets.kcal) < 50;
+  for (const k of ["kcal","protein","net","fat"]){ const el = $("#p-"+k); if (el && document.activeElement !== el) el.value = fx(S.targets[k]); }
+  if (document.activeElement !== $("#p-goal")) $("#p-goal").value = goal ?? "";
+  if (document.activeElement !== $("#p-rate")) $("#p-rate").value = B.phase === "bulk" ? B.rate.bulk : B.rate.cut;
+  $("#p-rate-wrap").hidden = B.phase === "maintain";
+  $("#p-rate-lab").textContent = B.phase === "bulk" ? "Gain per week (lb)" : "Loss per week (lb)";
+  // history
+  const ks = Object.keys(B.logs).filter(k => B.logs[k] && k <= today && (B.logs[k].w || B.logs[k].ev || B.logs[k].sleep || B.logs[k].steps)).sort().reverse().slice(0, 14);
+  const dot = (v, inv) => v ? `<i class="bio" style="background:${(inv ? 6-v : v) >= 4 ? "var(--protein)" : (inv ? 6-v : v) >= 3 ? "var(--warn)" : "var(--danger)"}"></i>` : "";
+  $("#wHist").innerHTML = ks.length ? ks.map(k => { const l = B.logs[k], a = avgAt(R.ser, k);
+    return `<button class="lrow" data-act="editWeigh" data-k="${k}"><div class="t"><b class="num">${l.w ? fmtW(l.w)+" lb" : "No weight"}${a != null ? ` <span class="fineprint">· avg ${fmtW(a)}</span>` : ""}</b>
+      <small class="num">${cdate(k).toLocaleDateString(undefined, {weekday:"short", month:"short", day:"numeric"})}${l.steps ? ` · ${(+l.steps).toLocaleString()} steps` : ""}${l.waist ? ` · waist ${l.waist}"` : ""}${l.rhr ? ` · RHR ${l.rhr}` : ""}</small></div>
+      ${R.waterDays && R.waterDays[k] && l.w ? `<span class="evtag" style="color:var(--teal);background:color-mix(in srgb, var(--teal) 15%, transparent)">Water</span>` : ""}${Array.isArray(l.ev) && l.ev.length ? `<span class="evtag">${l.ev.map(t => EV_LABEL[t] || t).join(" + ")}</span>` : ""}<span class="bios">${dot(l.sleep)}${dot(l.stress, true)}${dot(l.gym)}${dot(l.libido)}</span></button>`; }).join("")
+    : `<div class="empty-list">No check-ins yet. Tap <b>Log weigh-in</b> each morning.</div>`;
+}
+function openWeighIn(key){
+  const k0 = key || todayKey(), B = S.body, l0 = {...(B.logs[k0] || {})};
+  const P = B.profile;
+  const rate = (id, label, lo, hi, val) => `<div class="field"><label>${label} <span class="fineprint">· ${lo} → ${hi}</span></label><div class="chips rate" data-r="${id}">${[1,2,3,4,5].map(n => `<button class="chip${+val===n?" on":""}" data-v="${n}">${n}</button>`).join("")}</div></div>`;
+  const el = openSheet(`<div class="sheet-h"><div><h3>${key ? "Edit check-in" : "Morning check-in"}</h3><p>Do this every morning, including the morning after a cheat day. The coach handles water spikes.</p></div>
+      <button class="iconbtn" data-act="closeSheet" aria-label="Close">${XBTN}</button></div>
+    <div class="sheet-b">
+      <div class="field"><label for="wi-date">Weigh-in date</label><input class="inp" id="wi-date" type="date" value="${k0}" max="${todayKey()}" style="max-width:62%"></div>
+      <div class="field"><label for="wi-w">Morning weight (lb)</label><input class="inp num" id="wi-w" inputmode="decimal" value="${l0.w ?? ""}" placeholder="e.g. 178.4">
+        <p class="hint">Your weight that morning: right after waking and using the bathroom, before eating or drinking, same scale each day.</p></div>
+      <div class="grid2">
+        <div class="field"><label for="wi-steps">Steps that day</label><input class="inp num" id="wi-steps" inputmode="numeric" value="${l0.steps ?? ""}" placeholder="${P.steps || "10000"}"></div>
+        <div class="field"><label for="wi-waist">Waist (in)</label><input class="inp num" id="wi-waist" inputmode="decimal" value="${l0.waist ?? ""}" placeholder="optional"></div>
+      </div>
+      <p class="hint">Steps: that date's total (fill in yesterday's at night or the next morning). Waist: tape around your belly button, relaxed, once or twice a week.</p>
+      <div class="field"><label for="wi-rhr">Resting heart rate (bpm)</label><input class="inp num" id="wi-rhr" inputmode="numeric" value="${l0.rhr ?? ""}" placeholder="optional" style="max-width:48%">
+        <p class="hint">On waking, before getting up, from your watch or a 60-second pulse count.</p></div>
+      ${rate("sleep", "Last night's sleep", "poor", "great", l0.sleep)}
+      ${rate("stress", "Stress, past 24 hours", "low", "high", l0.stress)}
+      ${rate("gym", "Last gym session pump / strength", "flat", "great", l0.gym)}
+      ${rate("libido", "Drive / libido, past 24 hours", "low", "high", l0.libido)}
+      ${Array.isArray(l0.ev) && l0.ev.length ? `<p class="hint">Tagged as: <span class="evtag">${l0.ev.map(t => EV_LABEL[t] || t).join(" + ")}</span> (change it in Log cheat meals or days)</p>` : ""}
+      <button class="btn" id="wi-save">Save check-in</button>
+      ${key ? `<button class="btn ghost" id="wi-del">Delete this check-in</button>` : ""}
+    </div>`);
+  const vals = {sleep:l0.sleep, stress:l0.stress, gym:l0.gym, libido:l0.libido};
+  el.querySelectorAll(".chips.rate").forEach(g => g.addEventListener("click", e => {
+    const b = e.target.closest("[data-v]"); if (!b) return; const id = g.dataset.r, v = +b.dataset.v;
+    vals[id] = vals[id] === v ? null : v; g.querySelectorAll(".chip").forEach(c => c.classList.toggle("on", +c.dataset.v === vals[id]));
+  }));
+  el.querySelector("#wi-date").addEventListener("change", e => { const l = B.logs[e.target.value]; if (l && l.w && !key){ closeSheet(); openWeighIn(e.target.value); } });
+  el.querySelector("#wi-save").addEventListener("click", () => {
+    const k = el.querySelector("#wi-date").value || k0;
+    if (k > todayKey()){ toast("That date is in the future."); return; }
+    const num = id => { const v = parseFloat(String(el.querySelector(id).value).replace(",", ".")); return isFinite(v) && v > 0 ? v : null; };
+    const w = num("#wi-w");
+    if (w != null && (w < 60 || w > 700)){ toast("Enter your weight in pounds."); return; }
+    const old = B.logs[k] || {};
+    const rec = {w, steps:num("#wi-steps"), waist:num("#wi-waist"), rhr:num("#wi-rhr"), ...vals, ev: old.ev, evKcal: old.evKcal};
+    Object.keys(rec).forEach(x => (rec[x] == null || (Array.isArray(rec[x]) && !rec[x].length)) && delete rec[x]);
+    if (!Object.keys(rec).length){ toast("Add your weight or at least one other field."); return; }
+    if (key && key !== k){ const moved = B.logs[key] || {}; delete B.logs[key]; if (moved.ev && moved.ev.length) B.logs[key] = {ev: moved.ev, evKcal: moved.evKcal}; }
+    B.logs[k] = rec; saveBody(); closeSheet(); renderProgress(); toast(w ? `Logged ${fmtW(w)} lb` : "Check-in saved");
+  });
+  const del = el.querySelector("#wi-del");
+  if (del) del.addEventListener("click", () => { if (!del.dataset.armed){ del.dataset.armed = "1"; del.textContent = "Tap again to delete"; return; }
+    const l = B.logs[key] || {}; if (l.ev && l.ev.length) B.logs[key] = {ev: l.ev, evKcal: l.evKcal}; else delete B.logs[key];
+    saveBody(); closeSheet(); renderProgress(); toast("Check-in deleted"); });
+}
+/* Cheat meals / days: pick one or more days, tag them */
+function openCheat(){
+  const B = S.body, today = todayKey(), N = 21;
+  const days = Array.from({length:N}, (_,i) => cshift(today, -(N-1-i)));
+  const lead = cdate(days[0]).getDay();                              // align to weekday columns
+  const sel = new Set(), tags = new Set(); let extra = "";
+  const hasTag = k => B.logs[k] && Array.isArray(B.logs[k].ev) && B.logs[k].ev.length;
+  if (!hasTag(today)) sel.add(today); else { sel.add(today); B.logs[today].ev.forEach(t => tags.add(t)); extra = B.logs[today].evKcal ?? ""; }
+  const el = openSheet(`<div class="seg seg2" style="margin:0 0 12px"><button class="on" type="button">Log what happened</button><button type="button" id="ch-toplan">Plan ahead</button></div><div class="sheet-h"><div><h3>Log cheat meals or days</h3><p>Pick the day(s) you ate it, not the morning after. Keep doing your normal morning weigh-ins; the coach reads the jump after these days as water.</p></div>
+      <button class="iconbtn" data-act="closeSheet" aria-label="Close">${XBTN}</button></div>
+    <div class="sheet-b">
+      <div class="field"><label>Which days? <span class="fineprint">· tap all that apply · dot = already tagged</span></label>
+        <div class="daygrid" id="ch-days">${["S","M","T","W","T","F","S"].map(d => `<span class="fineprint" style="text-align:center;font-weight:800">${d}</span>`).join("")}${"<span></span>".repeat(lead)}${days.map(k => { const d = cdate(k);
+          return `<button class="dchip${k===today?" today":""}${hasTag(k)?" tagged":""}" data-day="${k}" aria-label="${d.toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric"})}">${d.getDate()}<small>${d.getDate()===1||k===days[0] ? d.toLocaleDateString(undefined,{month:"short"}) : ""}</small></button>`; }).join("")}</div>
+        <p class="hint" id="ch-sum"></p></div>
+      <div class="field"><label>What kind of day? <span class="fineprint">· pick any that fit</span></label><div class="chips" id="ch-ev">${["cheat_meal","cheat_day","salty","alcohol","carbs"].map(t => `<button class="chip" data-ev="${t}">${EV_LABEL[t]}</button>`).join("")}</div></div>
+      <div class="field"><label for="ch-desc">What did you eat? <span class="fineprint">· optional, for a calorie estimate</span></label>
+        <textarea class="inp ch-ta" id="ch-desc" placeholder="e.g. 2 slices of Domino's pepperoni pizza, a large Coke, Ben &amp; Jerry's pint"></textarea>
+        <div class="thumbs" id="ch-thumbs"></div>
+        <div class="btn-row"><button class="btn alt" id="ch-photo" ${S.sample && S.imgOK ? "" : "hidden"}>Add photos</button><button class="btn alt" id="ch-estimate" ${S.sample ? "" : "hidden"}>Estimate calories</button></div>
+        <p class="hint">${S.sample ? (S.sample.web ? "Claude looks up official restaurant and brand nutrition on the web, then fills in the calories below." : "Claude estimates from official restaurant and brand nutrition it knows, then fills in the calories below.") : "Add your Anthropic API key in More → AI Features to estimate from a description or photos."} With several days picked, describe one day; it's applied to each.</p>
+        <div class="est-box" id="ch-est" hidden></div>
+        <button class="toggle" type="button" id="ch-todiary" hidden><span>Add this food to my diary on ${"those days"}</span><span class="sw on"></span></button>
+      </div>
+      <div class="field" id="ch-kcalwrap"><label for="ch-kcal">Calories eaten that aren't in your diary <span class="fineprint">· per day, optional</span></label><input class="inp num" id="ch-kcal" inputmode="numeric" placeholder="e.g. 1200">
+        <p class="hint">If you logged the food in the diary, leave this empty. The app already counts it.</p></div>
+      <button class="btn" id="ch-save">Save</button>
+      <button class="btn ghost" id="ch-clear" hidden>Remove tags from selected days</button>
+    </div>`);
+  const draw = () => {
+    el.querySelectorAll("[data-day]").forEach(b => b.classList.toggle("on", sel.has(b.dataset.day)));
+    el.querySelectorAll("#ch-ev [data-ev]").forEach(b => b.classList.toggle("on", tags.has(b.dataset.ev)));
+    const list = [...sel].sort();
+    el.querySelector("#ch-sum").textContent = list.length ? `${list.length} day${list.length===1?"":"s"}: ${list.map(k => cdate(k).toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"})).join(", ")}` : "Tap at least one day.";
+    el.querySelector("#ch-clear").hidden = !list.some(hasTag);
+    el.querySelector("#ch-save").textContent = list.length > 1 ? `Save ${list.length} days` : "Save";
+  };
+  el.querySelector("#ch-kcal").value = extra;
+  el.querySelector("#ch-toplan").addEventListener("click", () => { closeSheet(); openCheatPlan(); });
+  // describe or photograph the food -> estimate
+  const photos = []; let est = null, toDiary = true;
+  const drawThumbs = () => { el.querySelector("#ch-thumbs").innerHTML = photos.map((p,i) => `<div class="th" style="background-image:url('${p.url}')"><button data-rmph="${i}" aria-label="Remove photo">${XBTN.replace(/width="18" height="18"/, 'width="12" height="12"')}</button></div>`).join(""); };
+  el.querySelector("#ch-thumbs").addEventListener("click", e => { const b = e.target.closest("[data-rmph]"); if (!b) return; const [p] = photos.splice(+b.dataset.rmph, 1); URL.revokeObjectURL(p.url); drawThumbs(); });
+  el.querySelector("#ch-photo").addEventListener("click", async () => {
+    const files = await pickFiles($("#fileCheat")); if (!files.length) return;
+    for (const f of files.slice(0, Math.max(0, (S.imgMax || 2) - photos.length))) photos.push({file:f, url:URL.createObjectURL(f)});
+    if (files.length && photos.length >= (S.imgMax || 2)) toast(`Up to ${S.imgMax || 2} photos per estimate.`);
+    drawThumbs();
+  });
+  const drawEst = () => {
+    const box = el.querySelector("#ch-est"), tg = el.querySelector("#ch-todiary");
+    box.hidden = !est; tg.hidden = !est;
+    el.querySelector("#ch-kcalwrap").hidden = !!(est && toDiary);
+    if (!est) return;
+    tg.querySelector(".sw").classList.toggle("on", toDiary);
+    tg.querySelector("span").textContent = `Add this food to my diary on ${sel.size > 1 ? `all ${sel.size} days` : "that day"}`;
+    const t = est.total;
+    box.innerHTML = est.items.map(it => `<div class="row"><span>${esc(it.name)}${it.amount ? ` <span class="fineprint">· ${esc(it.amount)}</span>` : ""}</span><span class="num">${Math.round(it.kcal)} kcal</span></div>`).join("")
+      + `<div class="row tot"><span>Total${sel.size > 1 ? " per day" : ""}</span><span class="num">${Math.round(t.kcal)} kcal</span></div>
+         <div class="fineprint num">P ${fx(t.p)} · C ${fx(Math.max(0, t.c - t.fib))} net · F ${fx(t.f)}${est.note ? ` · ${esc(est.note)}` : ""}</div>`;
+  };
+  el.querySelector("#ch-todiary").addEventListener("click", () => { toDiary = !toDiary; drawEst(); });
+  el.querySelector("#ch-estimate").addEventListener("click", async e => {
+    const desc = el.querySelector("#ch-desc").value.trim(), btn = e.currentTarget;
+    if (!desc && !photos.length){ toast("Describe what you ate or add a photo first."); return; }
+    btn.disabled = true; btn.innerHTML = `<span class="spin" style="width:18px;height:18px;border-width:3px;margin:0"></span> Estimating…`;
+    try {
+      const blobs = photos.length ? await prepShots(photos.map(p => p.file)) : [];
+      const web = !!(S.sample && S.sample.web);
+      const out = await askJSON(`Estimate the nutrition of what someone ate on a cheat meal or cheat day.
+Their description: "${desc || "(none, use the photos)"}"${blobs.length ? `\n${blobs.length} photo(s) of the food are attached; use them to identify items and judge portion sizes.` : ""}
+${web ? "Search the web for the official nutrition of identifiable restaurant menu items and branded products (e.g. the chain's nutrition page), and use USDA FoodData Central for generic foods." : "Use official restaurant and brand nutrition you know for identifiable items, and USDA FoodData Central for generic foods."}
+When amounts aren't given, assume a typical single serving. List each item separately.
+Return ONLY JSON {"items":[{"name":string,"amount":string,"kcal":number,"protein":number,"carbs":number,"fiber":number,"fat":number}],"note":string}. "note" is one short sentence on any big assumption (or "").`, {...(blobs.length ? {images:blobs.slice(0, S.imgMax || 2)} : {}), ...(web ? {web:true} : {modelTier:"default"})});
+      const items = ((out && out.items) || []).filter(x => x && x.name && isFinite(+x.kcal)).map(x => ({name:String(x.name).slice(0,60), amount:String(x.amount||"").slice(0,30), kcal:+x.kcal, p:num(x.protein), c:num(x.carbs), fib:num(x.fiber), f:num(x.fat)}));
+      if (!items.length){ toast("Couldn't identify the food. Add more detail and try again."); }
+      else {
+        const total = items.reduce((a,x) => ({kcal:a.kcal+x.kcal, p:a.p+x.p, c:a.c+x.c, fib:a.fib+x.fib, f:a.f+x.f}), {kcal:0,p:0,c:0,fib:0,f:0});
+        est = {items, total, note:String(out.note||"").slice(0,140), desc}; toDiary = true;
+        el.querySelector("#ch-kcal").value = Math.round(total.kcal);
+        if (!tags.size) tags.add(total.kcal >= 1500 ? "cheat_day" : "cheat_meal");
+        draw(); drawEst();
+      }
+    } catch(err){ toast(typeof errText === "function" ? errText(err, "The estimate didn't finish") : "The estimate didn't finish. Try again."); }
+    btn.disabled = false; btn.textContent = "Estimate calories";
+  });
+  el.querySelector("#ch-days").addEventListener("click", e => { const b = e.target.closest("[data-day]"); if (!b) return; const k = b.dataset.day;
+    if (sel.has(k)) sel.delete(k); else { sel.add(k); if (sel.size === 1 && hasTag(k)){ tags.clear(); B.logs[k].ev.forEach(t => tags.add(t)); el.querySelector("#ch-kcal").value = B.logs[k].evKcal ?? ""; } }
+    draw(); });
+  el.querySelector("#ch-ev").addEventListener("click", e => { const b = e.target.closest("[data-ev]"); if (!b) return; const t = b.dataset.ev; tags.has(t) ? tags.delete(t) : tags.add(t); draw(); });
+  el.querySelector("#ch-days").addEventListener("click", () => setTimeout(drawEst, 0));
+  el.querySelector("#ch-save").addEventListener("click", async e => {
+    if (!sel.size){ toast("Pick at least one day."); return; }
+    if (!tags.size){ toast("Pick what kind of day it was."); return; }
+    const kc = parseFloat(el.querySelector("#ch-kcal").value), addDiary = !!(est && toDiary);
+    e.currentTarget.disabled = true;
+    for (const k of sel){
+      const l = B.logs[k] || (B.logs[k] = {}); l.ev = [...tags];
+      if (!addDiary && kc > 0) l.evKcal = kc; else delete l.evKcal;
+      if (addDiary){
+        await Store.loadDay(k);
+        const t = est.total, name = "Cheat " + (tags.has("cheat_day") ? "day" : "meal") + ": " + est.items.map(x => x.name).join(", ");
+        day(k).entries.push({id:uid(), t:Date.now(), foodId:"est:"+uid(), name:name.slice(0,80), brand:"", n:{kcal:t.kcal, p:t.p, c:t.c, fib:t.fib, f:t.f}, grams:100, qty:1, unit:"p0", ulabel:"estimate", est:true, meal:"Uncategorized"});
+        saveDay(k);
+      }
+    }
+    photos.forEach(p => URL.revokeObjectURL(p.url));
+    saveBody(); closeSheet(); renderProgress(); if (addDiary) renderDiary(); toast(sel.size > 1 ? `Tagged ${sel.size} days. The coach will account for the water weight.` : "Logged. The coach will account for the water weight.");
+  });
+  el.querySelector("#ch-clear").addEventListener("click", () => {
+    sel.forEach(k => { const l = B.logs[k]; if (!l) return; delete l.ev; delete l.evKcal; if (!Object.keys(l).length) delete B.logs[k]; });
+    saveBody(); closeSheet(); renderProgress(); toast("Tags removed");
+  });
+  draw();
+}
+/* ---------- Plan a cheat meal or day ---------- */
+const PLAN_BASE = 600;   // the rest of the day assumed lean: protein + vegetables
+function planMath(R, days, cheatKcal){
+  const B = S.body, today = todayKey(), first = [...days].sort()[0], last = [...days].sort().pop();
+  const maint = R && R.tdee ? R.tdee : Math.round(S.targets.kcal + 500);
+  const dayTotal = Math.round(cheatKcal + PLAN_BASE), over = Math.max(0, dayTotal - maint), totalOver = over * days.length;
+  const def = R && R.tdee ? R.tdee - S.targets.kcal : 500;
+  const floor = B.profile.sex === "female" ? 1200 : 1500;
+  const lead = cdiff(today, first);                              // days before the first planned day
+  const bankN = Math.min(4, Math.max(0, lead));
+  const dates = Array.from({length: bankN}, (_,i) => cshift(first, -(bankN - i))).filter(k => k >= today && !days.includes(k));
+  const room = Math.max(0, S.targets.kcal - floor);
+  const delta = dates.length ? Math.min(300, room, Math.round(totalOver / dates.length / 10) * 10) : 0;
+  return {maint, dayTotal, over, totalOver, fat: totalOver / KCAL_PER_LB, delay: def > 100 ? Math.round(totalOver / def) : null,
+    bank: delta >= 50 && B.phase === "cut" ? {dates, delta, covers: Math.min(1, delta * dates.length / Math.max(1, totalOver))} : null,
+    first, last, clear: cshift(last, 4)};
+}
+function openCheatPlan(prefill){
+  const B = S.body, today = todayKey(), N = 21;
+  const days = Array.from({length:N}, (_,i) => cshift(today, i));
+  const lead = cdate(days[0]).getDay();
+  const sel = new Set(prefill ? prefill.days : []), tags = new Set(prefill ? prefill.types : ["cheat_meal"]);
+  const photos = []; let est = prefill && prefill.est ? prefill.est : null, choice = null;
+  const planned = k => B.logs[k] && B.logs[k].planned;
+  const el = openSheet(`<div class="seg seg2" style="margin:0 0 12px"><button type="button" id="pl-tolog">Log what happened</button><button type="button" class="on">Plan ahead</button></div>
+    <div class="sheet-h"><div><h3>Plan a cheat meal or day</h3><p>Pick the upcoming day(s) and describe what you might eat. You'll get a plan for before, during and after.</p></div>
+      <button class="iconbtn" data-act="closeSheet" aria-label="Close">${XBTN}</button></div>
+    <div class="sheet-b">
+      <div class="field"><label>Which days? <span class="fineprint">· today and the next 3 weeks · dot = already planned</span></label>
+        <div class="daygrid" id="pl-days">${["S","M","T","W","T","F","S"].map(d => `<span class="fineprint" style="text-align:center;font-weight:800">${d}</span>`).join("")}${"<span></span>".repeat(lead)}${days.map(k => { const d = cdate(k);
+          return `<button class="dchip${k===today?" today":""}${planned(k)?" tagged":""}" data-day="${k}" aria-label="${d.toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric"})}">${d.getDate()}<small>${d.getDate()===1||k===today?d.toLocaleDateString(undefined,{month:"short"}):""}</small></button>`; }).join("")}</div>
+        <p class="hint" id="pl-sum"></p></div>
+      <div class="field"><label>What kind? <span class="fineprint">· pick any that fit</span></label><div class="chips" id="pl-ev">${["cheat_meal","cheat_day","salty","alcohol","carbs"].map(t => `<button class="chip" data-ev="${t}">${EV_LABEL[t]}</button>`).join("")}</div></div>
+      <div class="field"><label for="pl-desc">What might you eat? <span class="fineprint">· per day</span></label>
+        <textarea class="inp ch-ta" id="pl-desc" placeholder="e.g. Olive Garden: breadsticks, chicken alfredo, a margarita and tiramisu">${prefill ? esc(prefill.desc || "") : ""}</textarea>
+        <div class="thumbs" id="pl-thumbs"></div>
+        <div class="btn-row"><button class="btn alt" id="pl-photo" ${S.sample && S.imgOK ? "" : "hidden"}>Add photos</button><button class="btn" id="pl-go">${S.sample ? "Make my plan" : "Use my calorie guess"}</button></div>
+        <div class="field" id="pl-manual" ${S.sample ? "hidden" : ""}><label for="pl-kcal">Your calorie guess for the cheat food <span class="fineprint">· per day</span></label><input class="inp num" id="pl-kcal" inputmode="numeric" placeholder="e.g. 1800"></div>
+        <p class="hint">${S.sample ? (S.sample.web ? "Claude looks up the restaurant or brand's official nutrition on the web." : "Claude estimates from official restaurant and brand nutrition it knows.") : "Add your Anthropic API key in More → AI Features to estimate from a description. Until then, enter a guess."}</p>
+      </div>
+      <div id="pl-out"></div>
+    </div>`);
+  const draw = () => {
+    el.querySelectorAll("#pl-days [data-day]").forEach(b => b.classList.toggle("on", sel.has(b.dataset.day)));
+    el.querySelectorAll("#pl-ev [data-ev]").forEach(b => b.classList.toggle("on", tags.has(b.dataset.ev)));
+    const list = [...sel].sort();
+    el.querySelector("#pl-sum").textContent = list.length ? `${list.length} day${list.length===1?"":"s"}: ${list.map(k => cdate(k).toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"})).join(", ")}` : "Tap the day(s) you're planning.";
+  };
+  const drawPlan = () => {
+    const out = el.querySelector("#pl-out");
+    if (!est || !sel.size){ out.innerHTML = ""; return; }
+    const R = lastCoach || coach(B, intakeMap(), today, S.targets), list = [...sel].sort(), m = planMath(R, list, est.total.kcal);
+    const dfmt = k => k === today ? "today" : cdate(k).toLocaleDateString(undefined, {weekday:"short", month:"short", day:"numeric"});
+    const n = list.length, many = n > 1;
+    let h = `<div class="est-box">${est.items.map(it => `<div class="row"><span>${esc(it.name)}${it.amount ? ` <span class="fineprint">· ${esc(it.amount)}</span>` : ""}</span><span class="num">${Math.round(it.kcal)} kcal</span></div>`).join("")}
+      <div class="row tot"><span>Cheat food${many ? " per day" : ""}</span><span class="num">${Math.round(est.total.kcal)} kcal</span></div>
+      <div class="fineprint">With the rest of the day lean (about ${PLAN_BASE} kcal of protein and vegetables), the day lands near <b>${m.dayTotal} kcal</b>, vs your maintenance of ${m.maint}.${est.note ? " " + esc(est.note) : ""}</div></div>`;
+    h += `<div class="stat-grid" style="margin:14px 0 6px">
+      <div class="stat"><b class="num">${m.totalOver ? "+" + m.totalOver : "0"}<span class="u"> kcal</span></b><small>Over maintenance${many ? " (all days)" : ""}</small></div>
+      <div class="stat"><b class="num" style="color:var(--warn)">${m.fat.toFixed(2)}<span class="u"> lb</span></b><small>Real fat (max)</small></div></div>`;
+    if (!m.totalOver){
+      h += `<p class="coach-p" style="color:var(--text)">This fits within your maintenance calories, so it won't cost you fat. Just keep the rest of the day lean. No calorie changes needed.</p>`;
+    } else {
+      h += `<h3 style="margin:14px 0 8px">Before: pick one</h3><div class="stack" id="pl-choices">`;
+      if (m.bank) h += `<button class="opt${choice==="bank"?" on":""}" data-choice="bank"><b>Bank calories (recommended)</b><span>Eat ${m.bank.delta} kcal less on ${m.bank.dates.map(dfmt).join(", ")}. That covers ${Math.round(m.bank.covers*100)}% of the extra, so ${m.bank.covers >= 0.95 ? "your week stays on plan" : "most of the week stays on plan"}. Protein stays at ${Math.round(S.targets.protein)} g.</span></button>`;
+      else if (cdiff(today, m.first) < 1) h += `<p class="hint">It's today, so there's no time to bank. After it, the app offers an optional payback.</p>`;
+      h += `<button class="opt${choice==="enjoy"?" on":""}" data-choice="enjoy"><b>Just enjoy it</b><span>No changes beforehand. It costs about ${m.fat.toFixed(2)} lb of fat${m.delay ? ` and pushes your goal date back about ${m.delay} day${m.delay===1?"":"s"}` : ""}.</span></button></div>`;
+    }
+    h += `<h3 style="margin:16px 0 8px">On the day</h3><ol class="plan">
+      <li><b>Front-load protein:</b> a lean, high-protein breakfast and lunch (about ${Math.round(S.targets.protein*0.6)} g before the cheat meal) keeps total calories in check.</li>
+      <li><b>Lift that day if you can.</b> The extra carbs go toward refilling muscle glycogen.</li>
+      <li><b>Hit your steps,</b> drink water through the day, and go easy on extra salt.</li>
+      <li><b>Log it afterward</b> with Log what happened → What did you eat?, so the real number replaces this estimate.</li></ol>
+      <h3 style="margin:16px 0 8px">After</h3><ol class="plan">
+      <li><b>Expect the scale up 1–4 lb</b> for 2–5 days${tags.has("salty")||tags.has("carbs")||tags.has("alcohol") ? " (salty, carb-heavy food and alcohol push it toward the high end)" : ""}. That's water and stored carbs, not fat.</li>
+      <li><b>The app handles it:</b> weigh-ins through ${dfmt(m.clear)} are checked against your pre-cheat weight, and water readings stay out of your trend.</li>
+      <li><b>Back to normal targets the next day.</b> No skipping meals or crash days.</li></ol>
+      <button class="btn" id="pl-save" style="margin-top:14px">Save plan</button>`;
+    out.innerHTML = h;
+    const cs = out.querySelector("#pl-choices");
+    if (cs) cs.addEventListener("click", e => { const b = e.target.closest("[data-choice]"); if (!b) return; choice = b.dataset.choice; cs.querySelectorAll(".opt").forEach(o => o.classList.toggle("on", o === b)); });
+    if (!choice && m.bank) choice = "bank"; else if (!choice) choice = "enjoy";
+    if (cs) cs.querySelectorAll(".opt").forEach(o => o.classList.toggle("on", o.dataset.choice === choice));
+    out.querySelector("#pl-save").addEventListener("click", () => savePlan(list, m));
+  };
+  const savePlan = (list, m) => {
+    if (!tags.size){ toast("Pick what kind of day it is."); return; }
+    B.sched = B.sched || {}; B.plans = B.plans || [];
+    const id = "p" + uid();
+    const label = tags.has("cheat_day") ? "cheat day" : tags.has("cheat_meal") ? "cheat meal" : (EV_LABEL[[...tags][0]] || "high day").toLowerCase();
+    list.forEach(k => { const l = B.logs[k] || (B.logs[k] = {}); l.ev = [...tags]; l.planned = id; l.planOver = m.over; });
+    if (choice === "bank" && m.bank) m.bank.dates.forEach(k => { B.sched[k] = {delta: m.bank.delta, plan: id, for: `${cdate(list[0]).toLocaleDateString(undefined,{weekday:"long"})} ${label}`}; });
+    B.plans.push({id, days:list, types:[...tags], desc: el.querySelector("#pl-desc").value.trim().slice(0,300), est: est ? {items: est.items, total: est.total, note: est.note} : null, over: m.over, bank: choice === "bank" && m.bank ? m.bank : null, created: today});
+    photos.forEach(p => URL.revokeObjectURL(p.url));
+    saveBody(); closeSheet(); renderProgress(); renderDiary();
+    toast(choice === "bank" && m.bank ? `Plan saved. Banking ${m.bank.delta} kcal on ${m.bank.dates.length} day${m.bank.dates.length===1?"":"s"}.` : "Plan saved.");
+  };
+  el.querySelector("#pl-tolog").addEventListener("click", () => { closeSheet(); openCheat(); });
+  el.querySelector("#pl-days").addEventListener("click", e => { const b = e.target.closest("[data-day]"); if (!b) return; const k = b.dataset.day; sel.has(k) ? sel.delete(k) : sel.add(k); draw(); drawPlan(); });
+  el.querySelector("#pl-ev").addEventListener("click", e => { const b = e.target.closest("[data-ev]"); if (!b) return; const t = b.dataset.ev; tags.has(t) ? tags.delete(t) : tags.add(t); draw(); drawPlan(); });
+  const drawThumbs = () => { el.querySelector("#pl-thumbs").innerHTML = photos.map((p,i) => `<div class="th" style="background-image:url('${p.url}')"><button data-rmph="${i}" aria-label="Remove photo">${XBTN.replace(/width="18" height="18"/, 'width="12" height="12"')}</button></div>`).join(""); };
+  el.querySelector("#pl-thumbs").addEventListener("click", e => { const b = e.target.closest("[data-rmph]"); if (!b) return; const [p] = photos.splice(+b.dataset.rmph, 1); URL.revokeObjectURL(p.url); drawThumbs(); });
+  el.querySelector("#pl-photo").addEventListener("click", async () => { const files = await pickFiles($("#fileCheat")); for (const f of files.slice(0, Math.max(0, (S.imgMax||2) - photos.length))) photos.push({file:f, url:URL.createObjectURL(f)}); drawThumbs(); });
+  el.querySelector("#pl-go").addEventListener("click", async e => {
+    if (!sel.size){ toast("Pick the day(s) first."); return; }
+    const desc = el.querySelector("#pl-desc").value.trim();
+    if (!S.sample){
+      const kc = parseFloat(el.querySelector("#pl-kcal").value);
+      if (!(kc > 0)){ toast("Enter your calorie guess for the cheat food."); return; }
+      est = {items:[{name: desc ? desc.slice(0,50) : "Cheat food", amount:"your guess", kcal:kc}], total:{kcal:kc, p:0, c:0, fib:0, f:0}, note:""}; drawPlan(); return;
+    }
+    if (!desc && !photos.length){ toast("Describe what you might eat, or add a photo of the menu."); return; }
+    const btn = e.currentTarget; btn.disabled = true; btn.innerHTML = `<span class="spin" style="width:18px;height:18px;border-width:3px;margin:0"></span> Planning…`;
+    try {
+      const blobs = photos.length ? await prepShots(photos.map(p => p.file)) : [];
+      const web = !!S.sample.web;
+      const out = await askJSON(`Someone is PLANNING a cheat meal or cheat day and wants a calorie estimate for one day's worth.
+What they might eat: "${desc || "(see photos)"}"${blobs.length ? `\\n${blobs.length} photo(s) attached (could be a menu or food); use them to identify items.` : ""}
+${web ? "Search the web for the official nutrition of identifiable restaurant menu items and branded products, and use USDA FoodData Central for generic foods." : "Use official restaurant and brand nutrition you know for identifiable items, and USDA FoodData Central for generic foods."}
+When amounts aren't given, assume a typical restaurant or single serving. List each item separately. Only the cheat food; don't add regular meals.
+Return ONLY JSON {"items":[{"name":string,"amount":string,"kcal":number,"protein":number,"carbs":number,"fiber":number,"fat":number}],"note":string}. "note" is one short sentence on any big assumption (or "").`, {...(blobs.length ? {images:blobs.slice(0, S.imgMax || 2)} : {}), ...(web ? {web:true} : {modelTier:"default"})});
+      const items = ((out && out.items) || []).filter(x => x && x.name && isFinite(+x.kcal)).map(x => ({name:String(x.name).slice(0,60), amount:String(x.amount||"").slice(0,30), kcal:+x.kcal, p:num(x.protein), c:num(x.carbs), fib:num(x.fiber), f:num(x.fat)}));
+      if (!items.length) toast("Couldn't identify the food. Add more detail and try again.");
+      else { const total = items.reduce((a,x) => ({kcal:a.kcal+x.kcal, p:a.p+x.p, c:a.c+x.c, fib:a.fib+x.fib, f:a.f+x.f}), {kcal:0,p:0,c:0,fib:0,f:0}); est = {items, total, note:String(out.note||"").slice(0,140)}; drawPlan(); setTimeout(() => el.querySelector("#pl-out").scrollIntoView({behavior:"smooth", block:"start"}), 60); }
+    } catch(err){ toast(errText(err, "The plan didn't finish")); }
+    btn.disabled = false; btn.textContent = "Make my plan";
+  });
+  draw(); drawPlan();
+}
+function cancelPlan(id){
+  const B = S.body, today = todayKey(), p = (B.plans || []).find(x => x.id === id); if (!p) return;
+  p.days.forEach(k => { const l = B.logs[k]; if (l && l.planned === id){ if (k > today){ delete l.ev; } delete l.planned; delete l.planOver; if (!Object.keys(l).length) delete B.logs[k]; } });
+  Object.keys(B.sched || {}).forEach(k => { if (B.sched[k].plan === id && k >= today) delete B.sched[k]; });
+  B.plans = B.plans.filter(x => x.id !== id);
+  saveBody(); renderProgress(); renderDiary(); toast("Plan cancelled");
+}
+function upcomingHTML(R){
+  const B = S.body, today = todayKey();
+  // tidy old schedule entries and finished plans
+  Object.keys(B.sched || {}).forEach(k => { if (cdiff(k, today) > 30) delete B.sched[k]; });
+  const plans = (B.plans || []).filter(p => p.days[p.days.length-1] >= today);
+  if (!plans.length) return "";
+  const dfmt = k => k === today ? "Today" : cdate(k).toLocaleDateString(undefined, {weekday:"short", month:"short", day:"numeric"});
+  return `<h3>Upcoming cheat plans</h3>` + plans.map(p => {
+    const bank = p.bank ? p.bank.dates.filter(k => k >= today) : [];
+    return `<div class="up-row"><div><b>${p.days.map(dfmt).join(", ")}</b> <span class="evtag">${p.types.map(t => EV_LABEL[t] || t).join(" + ")}</span>
+      <p class="fineprint" style="margin:4px 0 0">${p.est ? `≈${Math.round(p.est.total.kcal)} kcal of cheat food${p.days.length > 1 ? " per day" : ""} · ` : ""}${p.over ? `+${p.over} over maintenance${p.days.length > 1 ? " each" : ""}` : "within maintenance"}${bank.length ? ` · banking −${p.bank.delta} kcal on ${bank.map(dfmt).join(", ")}` : p.bank ? " · banking done" : ""}</p></div>
+      <div class="up-acts"><button class="chip" data-act="viewPlan" data-id="${p.id}">View</button><button class="chip" data-act="cancelPlan" data-id="${p.id}">Cancel</button></div></div>`;
+  }).join("");
+}
+function openProfile(){
+  const P = S.body.profile, ft = Math.floor((+P.heightIn||68)/12), inch = Math.round(((+P.heightIn||68) - ft*12)*10)/10;
+  const el = openSheet(`<div class="sheet-h"><div><h3>Your stats</h3><p>Used for the starting expenditure estimate. Your logged data takes over within 2–4 weeks.</p></div>
+      <button class="iconbtn" data-act="closeSheet" aria-label="Close">${XBTN}</button></div>
+    <div class="sheet-b">
+      <div class="field"><label>Sex (for the BMR formula)</label><div class="chips" id="pf-sex">${[["male","Male"],["female","Female"]].map(([v,l]) => `<button class="chip${P.sex===v?" on":""}" data-v="${v}">${l}</button>`).join("")}</div></div>
+      <div class="grid3">
+        <div class="field"><label for="pf-age">Age</label><input class="inp num" id="pf-age" inputmode="numeric" value="${P.age ?? ""}" placeholder="years"></div>
+        <div class="field"><label for="pf-ft">Height ft</label><input class="inp num" id="pf-ft" inputmode="numeric" value="${ft}"></div>
+        <div class="field"><label for="pf-in">in</label><input class="inp num" id="pf-in" inputmode="decimal" value="${inch}"></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label for="pf-steps">Typical steps/day</label><input class="inp num" id="pf-steps" inputmode="numeric" value="${P.steps ?? ""}"></div>
+        <div class="field"><label for="pf-lift">Lifting days/week</label><input class="inp num" id="pf-lift" inputmode="numeric" value="${P.liftDays ?? ""}"></div>
+      </div>
+      <button class="btn" id="pf-save">Save</button>
+    </div>`);
+  let sex = P.sex;
+  el.querySelector("#pf-sex").addEventListener("click", e => { const b = e.target.closest("[data-v]"); if (!b) return; sex = b.dataset.v; el.querySelectorAll("#pf-sex .chip").forEach(c => c.classList.toggle("on", c === b)); });
+  el.querySelector("#pf-save").addEventListener("click", () => {
+    const n = id => parseFloat(el.querySelector(id).value);
+    const h = (n("#pf-ft")||0)*12 + (n("#pf-in")||0);
+    S.body.profile = {sex, age: n("#pf-age") > 0 ? n("#pf-age") : null, heightIn: h > 48 && h < 96 ? h : P.heightIn, steps: n("#pf-steps") >= 0 ? n("#pf-steps") : P.steps, liftDays: n("#pf-lift") >= 0 ? Math.min(7, n("#pf-lift")) : P.liftDays};
+    saveBody(); closeSheet(); renderProgress(); toast("Stats saved");
+  });
+}
+function applySuggested(){
+  const R = lastCoach; if (!R || R.suggest == null) return;
+  const T = {...S.targets}, kcal = R.suggest;
+  const net = Math.max(30, Math.round((kcal - T.protein*4 - T.fat*9) / 4));
+  S.targets = {...T, kcal, net}; Store.save("settings"); renderProgress(); if (typeof renderMore === "function") renderMore();
+  toast(`Targets updated: ${kcal} kcal, ${net} g net carbs`);
+}
+function startRefeed(){
+  const R = lastCoach; if (!R || !R.tdee) return;
+  const today = todayKey(), prev = {...S.targets}, kcal = Math.max(prev.kcal, R.tdee);
+  S.body.refeed = {start: today, end: cshift(today, 1), prev};
+  [today, cshift(today, 1)].forEach(k => { const l = S.body.logs[k] || (S.body.logs[k] = {}); l.ev = [...new Set([...(l.ev||[]), "refeed"])]; });
+  S.targets = {...prev, kcal, net: Math.round(prev.net + (kcal - prev.kcal)/4)};
+  saveBody(); Store.save("settings"); renderProgress(); toast(`Refeed on: ${kcal} kcal for 2 days`);
+}
+function endRefeed(){
+  const rf = S.body.refeed; if (!rf) return;
+  if (rf.prev) S.targets = {...S.targets, ...rf.prev};
+  S.body.refeed = null; saveBody(); Store.save("settings"); renderProgress(); toast("Refeed ended. Cut targets restored.");
+}
+
 /* ---------- Actions ---------- */
 function setTab(t){
   S.tab = t; closeMenu(); ["foods","more"].forEach(closeSubs);
@@ -2119,6 +3040,8 @@ function dayMenu(btn){
 
 document.addEventListener("click", async e => {
   const tabBtn = e.target.closest("[data-tab]"); if (tabBtn) return setTab(tabBtn.dataset.tab);
+  const ph = e.target.closest("[data-phase]"); if (ph){ if (S.body.phase !== ph.dataset.phase){ S.body.phase = ph.dataset.phase; saveBody(); renderProgress(); toast(`Phase: ${ph.textContent}. The coach and suggestions now follow it.`); } return; }
+  const rg = e.target.closest("[data-range]"); if (rg){ S.wRange = +rg.dataset.range; renderProgress(); return; }
   const listBtn = e.target.closest("[data-list]"); if (listBtn) return openList(listBtn.dataset.list);
   const subBtn = e.target.closest("[data-sub]"); if (subBtn){ openSub(S.tab, subBtn.dataset.sub); renderMore(); renderLook(); return; }
   const a = e.target.closest("[data-act]");
@@ -2138,6 +3061,25 @@ document.addEventListener("click", async e => {
     case "pagePrev": setPage(S.page - 1); break;
     case "pageNext": setPage(S.page + 1); break;
     case "goMore": setTab("more"); openSub("more", "targets"); break;
+    case "logWeight": case "coach_logWeight": openWeighIn(); break;
+    case "editWeigh": openWeighIn(a.dataset.k); break;
+    case "logCheat": openCheat(); break;
+    case "cancelPlan": { if (!a.dataset.armed){ a.dataset.armed = "1"; a.textContent = "Tap again"; break; } cancelPlan(a.dataset.id); break; }
+    case "viewPlan": { const pl = (S.body.plans || []).find(x => x.id === a.dataset.id); if (pl) openCheatPlan({days: pl.days.filter(k => k >= todayKey()), types: pl.types, desc: pl.desc, est: pl.est}); break; }
+    case "startPayback": startPayback(+a.dataset.delta); break;
+    case "endPayback": endPayback(); break;
+    case "editProfile": openProfile(); break;
+    case "coach_applySuggest": applySuggested(); break;
+    case "coach_startRefeed": startRefeed(); break;
+    case "coach_endRefeed": endRefeed(); break;
+    case "coach_toMaintain": S.body.phase = "maintain"; saveBody(); renderProgress(); toast("Switched to Maintaining"); break;
+    case "saveProgressTargets": {
+      const T = {...S.targets}; for (const k of ["kcal","protein","net","fat"]){ const v = parseFloat($("#p-"+k).value); if (v > 0) T[k] = v; }
+      const g = parseFloat($("#p-goal").value); S.body.goal = g > 60 && g < 700 ? g : null;
+      const rt = parseFloat($("#p-rate").value);
+      if (rt > 0){ if (S.body.phase === "bulk") S.body.rate.bulk = Math.min(1.5, rt); else S.body.rate.cut = Math.min(2.5, rt); }
+      S.targets = T; Store.save("settings"); saveBody(); renderProgress(); renderMore(); toast("Goal and targets saved"); break;
+    }
     case "bgPick": pickBg(); break;
     case "bgClear": clearBg(); toast("Default background"); break;
     case "toggleClearTop": {
@@ -2167,7 +3109,7 @@ document.addEventListener("click", async e => {
       if (a.closest(".swipe") && a.closest(".swipe").classList.contains("open")){ closeSwipes(); break; }
       const base = getFood(en.foodId);
       const food = en.items ? {...(base||{}), id:en.foodId, name:en.name, brand:en.brand||"", n:en.n, portions:[{l:"this entry", g:en.grams, q:1}], liquid:false, d:1, src:"recipe"}
-        : base || {id:en.foodId, name:en.name, brand:en.brand, n:en.n, portions:[], liquid:["ml","floz"].includes(en.unit), d:1, src:"custom"};
+        : base || {id:en.foodId, name:en.name, brand:en.brand, n:en.n, portions: en.est ? [{l:"estimate", g:100, q:1}] : [], liquid:["ml","floz"].includes(en.unit), d:1, src: en.est ? "claude" : "custom"};
       openLog(food, {entry:en}); break; }
     case "delEntry": { const d = day(), en = d.entries.find(x => x.id === a.dataset.id); if (!en) break;
       const sw = a.closest(".swipe"); if (sw){ sw.style.transition = "opacity .18s"; sw.style.opacity = "0"; }
@@ -2260,6 +3202,7 @@ setTimeout(fitBottom, 0);
 /* ---------- Boot ---------- */
 Store.local();
 try { if (repairFoods()) Store.save("foods"); } catch(e){}
+try { checkRefeedEnd(); } catch(e){}
 if (day().entries.some(e => e.meal === S.active)) S.open[S.active] = true;
 renderDiary();
 Store.init();
