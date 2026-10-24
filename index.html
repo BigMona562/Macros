@@ -325,6 +325,8 @@ ol.plan b{color:var(--text)}
 .dchip.today{box-shadow:inset 0 0 0 1.5px var(--line)}
 .dchip.tagged::after{content:"";position:absolute;bottom:5px;width:5px;height:5px;border-radius:50%;background:var(--teal)}
 .dchip.on.tagged::after{background:var(--on-accent)}
+.dchip.tagged.auto::after{background:transparent;box-shadow:inset 0 0 0 1.5px var(--teal)}
+.dchip.on.tagged.auto::after{background:transparent;box-shadow:inset 0 0 0 1.5px var(--on-accent)}
 .bio{width:9px;height:9px;border-radius:50%;display:block}
 .chips.rate{display:grid;grid-template-columns:repeat(5,1fr)}
 .chips.rate .chip{text-align:center;padding:10px 0}
@@ -2066,7 +2068,7 @@ Return ONLY JSON {"foods":[{"i":number,${MICRO_SPEC}}]}`, {modelTier:"default"})
 }
 
 /* ---------- Repair saved recipes/meals whose serving sizes or nutrition went missing ---------- */
-const APP_VERSION = "2026.10.23-8";
+const APP_VERSION = "2026.10.24-1";
 function repairFoods(){
   let fixed = 0;
   for (const f of Object.values(S.foods)){
@@ -2276,7 +2278,7 @@ function cheatEpisodes(body, intake, today, T){
   const f = lastW ? formulaTDEE(body, +body.logs[lastW].w) : null;
   const ref = Math.max(T.kcal || 0, f ? f.tdee : 0);
   const days = new Set(tagged);
-  for (let i = 0; i <= 35; i++){ const k = cshift(today, -i); if (ref && intake[k] >= ref + 500) days.add(k); }
+  for (let i = 0; i <= 35; i++){ const k = cshift(today, -i); if (ref && intake[k] >= ref + 500 && !(body.logs[k] && body.logs[k].notCheat)) days.add(k); }
   const sorted = [...days].sort(), eps = [];
   sorted.forEach(k => { const e = eps[eps.length-1]; if (e && cdiff(e.last, k) <= 1){ e.last = k; e.days.push(k); } else eps.push({first:k, last:k, days:[k]}); });
   const water = {};
@@ -2732,13 +2734,15 @@ function openCheat(){
   const lead = cdate(days[0]).getDay();                              // align to weekday columns
   const sel = new Set(), tags = new Set(); let extra = "";
   const hasTag = k => B.logs[k] && Array.isArray(B.logs[k].ev) && B.logs[k].ev.length;
+  const auto = new Set(); try { cheatEpisodes(bodyNorm(B), intakeMap(), today, S.targets).eps.forEach(e => e.days.forEach(k => { if (!hasTag(k)) auto.add(k); })); } catch(e){}
+  const flagged = k => hasTag(k) || auto.has(k);
   if (!hasTag(today)) sel.add(today); else { sel.add(today); B.logs[today].ev.forEach(t => tags.add(t)); extra = B.logs[today].evKcal ?? ""; }
   const el = openSheet(`<div class="seg seg2" style="margin:0 0 12px"><button class="on" type="button">Log what happened</button><button type="button" id="ch-toplan">Plan ahead</button></div><div class="sheet-h"><div><h3>Log cheat meals or days</h3><p>Pick the day(s) you ate it, not the morning after. Keep doing your normal morning weigh-ins; the coach reads the jump after these days as water.</p></div>
       <button class="iconbtn" data-act="closeSheet" aria-label="Close">${XBTN}</button></div>
     <div class="sheet-b">
-      <div class="field"><label>Which days? <span class="fineprint">· tap all that apply · dot = already tagged</span></label>
+      <div class="field"><label>Which days? <span class="fineprint">· tap all that apply · dot = tagged${auto.size ? " · ring = flagged for high calories" : ""}</span></label>
         <div class="daygrid" id="ch-days">${["S","M","T","W","T","F","S"].map(d => `<span class="fineprint" style="text-align:center;font-weight:800">${d}</span>`).join("")}${"<span></span>".repeat(lead)}${days.map(k => { const d = cdate(k);
-          return `<button class="dchip${k===today?" today":""}${hasTag(k)?" tagged":""}" data-day="${k}" aria-label="${d.toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric"})}">${d.getDate()}<small>${d.getDate()===1||k===days[0] ? d.toLocaleDateString(undefined,{month:"short"}) : ""}</small></button>`; }).join("")}</div>
+          return `<button class="dchip${k===today?" today":""}${hasTag(k)?" tagged":auto.has(k)?" tagged auto":""}" data-day="${k}" aria-label="${d.toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric"})}">${d.getDate()}<small>${d.getDate()===1||k===days[0] ? d.toLocaleDateString(undefined,{month:"short"}) : ""}</small></button>`; }).join("")}</div>
         <p class="hint" id="ch-sum"></p></div>
       <div class="field"><label>What kind of day? <span class="fineprint">· pick any that fit</span></label><div class="chips" id="ch-ev">${["cheat_meal","cheat_day","salty","alcohol","carbs"].map(t => `<button class="chip" data-ev="${t}">${EV_LABEL[t]}</button>`).join("")}</div></div>
       <div class="field"><label for="ch-desc">What did you eat? <span class="fineprint">· optional, for a calorie estimate</span></label>
@@ -2752,14 +2756,14 @@ function openCheat(){
       <div class="field" id="ch-kcalwrap"><label for="ch-kcal">Calories eaten that aren't in your diary <span class="fineprint">· per day, optional</span></label><input class="inp num" id="ch-kcal" inputmode="numeric" placeholder="e.g. 1200">
         <p class="hint">If you logged the food in the diary, leave this empty. The app already counts it.</p></div>
       <button class="btn" id="ch-save">Save</button>
-      <button class="btn ghost" id="ch-clear" hidden>Remove tags from selected days</button>
+      <button class="btn ghost" id="ch-clear" hidden>Not a cheat day: remove from selected days</button>
     </div>`);
   const draw = () => {
     el.querySelectorAll("[data-day]").forEach(b => b.classList.toggle("on", sel.has(b.dataset.day)));
     el.querySelectorAll("#ch-ev [data-ev]").forEach(b => b.classList.toggle("on", tags.has(b.dataset.ev)));
     const list = [...sel].sort();
     el.querySelector("#ch-sum").textContent = list.length ? `${list.length} day${list.length===1?"":"s"}: ${list.map(k => cdate(k).toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"})).join(", ")}` : "Tap at least one day.";
-    el.querySelector("#ch-clear").hidden = !list.some(hasTag);
+    el.querySelector("#ch-clear").hidden = !list.some(flagged);
     el.querySelector("#ch-save").textContent = list.length > 1 ? `Save ${list.length} days` : "Save";
   };
   el.querySelector("#ch-kcal").value = extra;
@@ -2818,11 +2822,11 @@ Return ONLY JSON {"items":[{"name":string,"amount":string,"kcal":number,"protein
   el.querySelector("#ch-days").addEventListener("click", () => setTimeout(drawEst, 0));
   el.querySelector("#ch-save").addEventListener("click", async e => {
     if (!sel.size){ toast("Pick at least one day."); return; }
-    if (!tags.size){ toast("Pick what kind of day it was."); return; }
+    if (!tags.size){ if ([...sel].some(flagged)) { removeCheat(); return; } toast("Pick what kind of day it was."); return; }
     const kc = parseFloat(el.querySelector("#ch-kcal").value), addDiary = !!(est && toDiary);
     e.currentTarget.disabled = true;
     for (const k of sel){
-      const l = B.logs[k] || (B.logs[k] = {}); l.ev = [...tags];
+      const l = B.logs[k] || (B.logs[k] = {}); l.ev = [...tags]; delete l.notCheat;
       if (!addDiary && kc > 0) l.evKcal = kc; else delete l.evKcal;
       if (addDiary){
         await Store.loadDay(k);
@@ -2834,10 +2838,24 @@ Return ONLY JSON {"items":[{"name":string,"amount":string,"kcal":number,"protein
     photos.forEach(p => URL.revokeObjectURL(p.url));
     saveBody(); closeSheet(); renderProgress(); if (addDiary) renderDiary(); toast(sel.size > 1 ? `Tagged ${sel.size} days. The coach will account for the water weight.` : "Logged. The coach will account for the water weight.");
   });
-  el.querySelector("#ch-clear").addEventListener("click", () => {
-    sel.forEach(k => { const l = B.logs[k]; if (!l) return; delete l.ev; delete l.evKcal; if (!Object.keys(l).length) delete B.logs[k]; });
-    saveBody(); closeSheet(); renderProgress(); toast("Tags removed");
-  });
+  const removeCheat = () => {
+    const list = [...sel].filter(flagged); if (!list.length){ toast("None of the selected days are marked as cheat days."); return; }
+    list.forEach(k => {
+      const l = B.logs[k] || (B.logs[k] = {});
+      delete l.ev; delete l.evKcal;
+      if (l.planned){                                   // unlink from a cheat plan
+        const pid = l.planned, p = (B.plans || []).find(x => x.id === pid);
+        delete l.planned; delete l.planOver;
+        if (B.sched && B.sched[k] && B.sched[k].plan === pid) delete B.sched[k];
+        if (p){ p.days = p.days.filter(d => d !== k); if (!p.days.length){ Object.keys(B.sched || {}).forEach(d => { if (B.sched[d].plan === pid) delete B.sched[d]; }); B.plans = B.plans.filter(x => x.id !== pid); } }
+      }
+      if (auto.has(k)) l.notCheat = true;              // high-calorie day the coach flagged on its own
+      if (!Object.keys(l).length) delete B.logs[k];
+    });
+    saveBody(); closeSheet(); renderProgress(); renderDiary();
+    toast(list.length > 1 ? `Removed ${list.length} cheat days` : "Cheat day removed");
+  };
+  el.querySelector("#ch-clear").addEventListener("click", removeCheat);
   draw();
 }
 /* ---------- Plan a cheat meal or day ---------- */
