@@ -455,7 +455,7 @@ body::before{z-index:2;-webkit-backdrop-filter:blur(var(--blur,16px)) saturate(1
         <div class="fcard">
           <button class="fcard-top" data-list="foods"><span class="ic"><svg width="42" height="42" viewBox="0 0 30 30"><path fill="var(--accent)" d="M15 9.5c-2-1.6-6.7-2.2-9 1.4-2.3 3.7-.7 9.5 2.2 12.8 1.9 2.2 3.6 3 5.2 2.2.6-.3 1.1-.3 1.6-.3s1 0 1.6.3c1.6.8 3.3 0 5.2-2.2 2.9-3.3 4.5-9.1 2.2-12.8-2.3-3.6-7-3-9-1.4z"/><path d="M15 9.6c0-2.4.8-4.4 2.6-5.8" stroke="var(--protein)" stroke-width="2.2" fill="none" stroke-linecap="round"/></svg></span>
             <span class="tx"><b>Custom Foods</b><span>Add any item that isn't in the database, by hand or from its label.</span></span><span class="chev"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg></span></button>
-          <div class="fcard-acts"><button class="pill" data-act="newFood">CREATE FOOD</button><button class="pill-text" data-act="labelScanNew">SCAN LABEL</button></div>
+          <div class="fcard-acts"><button class="pill" data-act="newFood">CREATE FOOD</button><button class="pill-text" data-act="labelScanNew">SCAN LABEL</button><button class="pill-text" data-act="foodShot">SCREENSHOT</button></div>
         </div>
         <div class="fcard">
           <div class="fcard-top"><span class="ic"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--carbs)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M9.5 7.5h5M9.5 11h5M9.5 14.5h3"/></svg></span>
@@ -585,6 +585,7 @@ body::before{z-index:2;-webkit-backdrop-filter:blur(var(--blur,16px)) saturate(1
 <input type="file" id="fileLabel" accept="image/*" hidden>
 <input type="file" id="fileShots" accept="image/*" multiple hidden>
 <input type="file" id="fileImport" accept="application/json,.json" hidden>
+<input type="file" id="fileFoodShot" accept="image/*" multiple hidden>
 <input type="file" id="fileCheat" accept="image/*" multiple hidden>
 <input type="file" id="fileBg" accept="image/*" hidden>
 <div id="bgHost" aria-hidden="true"><div id="bgDim"></div></div>
@@ -1068,7 +1069,7 @@ async function renderDiscover(){
 }
 
 const LIST_CFG = {
-  foods:   {title:"Custom Foods",   noun:"Food",   add:"newFood",   test:f => f.src !== "recipe"},
+  foods:   {title:"Custom Foods",   noun:"Food",   add:"addFoodMenu",   test:f => f.src !== "recipe"},
   recipes: {title:"Custom Recipes", noun:"Recipe", add:"newRecipe", test:f => f.src === "recipe" && (f.recipe||{}).kind !== "meal"},
   meals:   {title:"Custom Meals",   noun:"Meal",   add:"newMeal",   test:f => f.src === "recipe" && (f.recipe||{}).kind === "meal"},
 };
@@ -1093,7 +1094,7 @@ function renderList(){
   $("#listCount").textContent = `${items.length} ${cfg.noun}${items.length===1?"":"s"}`;
   const ch = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>`;
   $("#listRows").innerHTML = items.length ? items.map(f => `<button class="lrow" data-act="foodLog" data-id="${esc(f.id)}"><div class="t"><b>${esc(f.brand ? f.brand+", "+f.name : f.name)}</b><small class="num">${esc(portionLine(f))}</small></div>${ch}</button>`).join("")
-    : `<div class="empty-list">${q ? "Nothing matches that search." : S.list === "meals" ? "No meals yet. Tap + ADD, or open a meal in your diary and tap Save as meal." : S.list === "recipes" ? "No recipes yet. Tap + ADD, or import one from a photo." : "No custom foods yet. Tap + ADD, scan a label, or scan a barcode."}</div>`;
+    : `<div class="empty-list">${q ? "Nothing matches that search." : S.list === "meals" ? "No meals yet. Tap + ADD, or open a meal in your diary and tap Save as meal." : S.list === "recipes" ? "No recipes yet. Tap + ADD, or import one from a photo." : "No custom foods yet. Tap + ADD to add one from a screenshot, a label photo, or by hand."}</div>`;
 }
 function renderFoods(){ const sub = $("#v-foods .sub[data-name=list]"); if (sub && !sub.hidden) renderList(); }
 
@@ -1691,6 +1692,50 @@ Read the label exactly as printed (do not estimate). Return ONLY JSON:
   }
 }
 
+/* ---------- Custom food from a screenshot ---------- */
+function openAddFoodMenu(){
+  const el = openSheet(`<div class="sheet-h"><div><h3>Add a custom food</h3></div><button class="iconbtn" data-act="closeSheet" aria-label="Close">${XBTN}</button></div>
+    <div class="sheet-b">
+      <button class="ask" data-addf="shot"><svg style="flex:none" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--carbs)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10 18.5h4"/><path d="m9 13 2-2 2 2 2-3"/></svg><div><b>From a screenshot</b><small>A nutrition label, a brand or restaurant website, or another tracking app</small></div></button>
+      <button class="ask" data-addf="label"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg><div><b>Scan a label</b><small>Take a photo of the Nutrition Facts</small></div></button>
+      <button class="ask" data-addf="type"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg><div><b>Type it in</b><small>Enter the numbers yourself</small></div></button>
+    </div>`);
+  el.addEventListener("click", e => { const b = e.target.closest("[data-addf]"); if (!b) return; const w = b.dataset.addf; closeSheet();
+    if (w === "shot") openShotFood(); else if (w === "label") openLabelScan(""); else openFoodForm(null, {}); });
+}
+async function openShotFood(){
+  if (!(S.sample && S.imgOK)){ toast("Reading screenshots needs your Anthropic API key (More → AI Features). Type it in for now."); openFoodForm(null, {}); return; }
+  const files = await pickFiles($("#fileFoodShot")); if (!files.length) return;
+  const el = openSheet(`<div class="sheet-b center" style="padding:20px 0"><div class="spin"></div><h3 style="margin:6px 0 0">Reading the screenshot…</h3><p class="fineprint">Copying the nutrition exactly as shown.</p></div>`);
+  try {
+    const blobs = (await prepShots(files.slice(0, 3))).slice(0, Math.max(1, S.imgMax || 3));
+    const out = await S.sample.json(`The image(s) are screenshots or photos showing the nutrition information of a food. It may be a Nutrition Facts label, a brand or restaurant website, a grocery app listing, or another food-tracking app (MyFitnessPal, Cronometer, Lose It, etc.). Several images may be parts of the same page.
+Copy the numbers exactly as shown (do not estimate). Return ONLY JSON:
+{"foods":[{"name":string,"brand":string,"servingLabel":string,"servingQty":number,"servingGrams":number or null,"servingMl":number or null,"liquid":boolean,"kcal":number,"protein":number,"carbs":number,"fiber":number,"fat":number,${MICRO_SPEC}}],"readable":boolean}
+- Usually there is ONE food. Only list several if the screenshot clearly shows nutrition for several different foods (max 8).
+- Nutrients are for ONE serving as shown. carbs = total carbohydrate, fiber = dietary fiber (0 if not shown). If the page shows net carbs only, put net carbs in carbs and 0 in fiber.
+- If only "per 100 g" values are shown, use servingLabel "g", servingQty 100, servingGrams 100.
+- servingLabel is the household unit noun without the number ("cup", "bar", "slice", "sandwich"); servingQty is its number. servingGrams / servingMl only if shown, else null.
+- Include every micronutrient that is shown (sugars = total sugars); leave out the rest. If only %DV is shown, convert using FDA Daily Values.
+- name: the food's name as shown; brand: the brand or restaurant if shown, else "".
+- readable=false if no nutrition numbers are legible.`, {images:blobs, modelTier:"default"});
+    const foods = ((out && out.foods) || []).filter(f => f && f.name && isFinite(+f.kcal));
+    if (!out || out.readable === false || !foods.length) throw {code:"unreadable"};
+    if (topSheet() === el) closeSheet();
+    const toPrefill = f => { const g = +f.servingGrams > 0 ? +f.servingGrams : (+f.servingMl > 0 ? +f.servingMl : 0);
+      return {name:f.name||"", brand:f.brand||"", sLabel:f.servingLabel||"serving", sQty:+f.servingQty>0?+f.servingQty:1, sGrams:g||"",
+        liquid:!!f.liquid || (!(+f.servingGrams>0) && +f.servingMl>0), kcal:f.kcal, p:f.protein, c:f.carbs, fib:f.fiber, f:f.fat, m:readMicros(f.micros), src:"label"}; };
+    const open = f => { const pf = toPrefill(f); openFoodForm(null, {prefill:pf}); toast(pf.sGrams ? "Got it. Check the name and numbers, then save." : "Got it. Add the serving weight in grams if you know it, then save."); };
+    if (foods.length === 1) return open(foods[0]);
+    const pick = openSheet(`<div class="sheet-h"><div><h3>Which food?</h3><p>The screenshot shows ${foods.length} foods. Pick one to add; you can come back for the others.</p></div><button class="iconbtn" data-act="closeSheet" aria-label="Close">${XBTN}</button></div>
+      <div class="sheet-b">${foods.map((f,i) => `<button class="ask" data-shotpick="${i}"><div><b>${esc(f.name)}</b><small>${esc([f.brand, `${Math.round(+f.kcal)} kcal`, f.servingQty && f.servingLabel ? `${f.servingQty} ${f.servingLabel}` : ""].filter(Boolean).join(" · "))}</small></div></button>`).join("")}</div>`);
+    pick.addEventListener("click", e => { const b = e.target.closest("[data-shotpick]"); if (!b) return; closeSheet(); open(foods[+b.dataset.shotpick]); });
+  } catch(e){
+    if (topSheet() === el) closeSheet();
+    toast(e && e.code === "unreadable" ? "Couldn't find nutrition numbers in that screenshot. Try one that shows the calories and macros clearly." : aiFail(e, "Couldn't read the screenshot. Try again or type it in."));
+  }
+}
+
 /* ---------- Food form (create / edit) ---------- */
 function openFoodForm(food, {barcode, prefill}={}){
   const editing = !!food;
@@ -2068,7 +2113,7 @@ Return ONLY JSON {"foods":[{"i":number,${MICRO_SPEC}}]}`, {modelTier:"default"})
 }
 
 /* ---------- Repair saved recipes/meals whose serving sizes or nutrition went missing ---------- */
-const APP_VERSION = "2026.10.24-1";
+const APP_VERSION = "2026.10.24-2";
 function repairFoods(){
   let fixed = 0;
   for (const f of Object.values(S.foods)){
@@ -3232,7 +3277,7 @@ document.addEventListener("click", async e => {
     case "newMeal": openRecipeEditor(null, {kind:"meal", servings:1}); break;
     case "foodsMenu": { closeMenu(); const r = a.getBoundingClientRect(), m = document.createElement("div"); m.className = "menu";
       m.style.top = (r.bottom + 6)+"px"; m.style.right = Math.max(12, window.innerWidth - r.right)+"px";
-      m.innerHTML = `<button data-act="newFood">Create food</button><button data-act="newRecipe">Create recipe</button><button data-act="newMeal">Create meal</button><button data-act="labelScanNew">Scan a label</button><button data-act="importShots">Import screenshot</button>`;
+      m.innerHTML = `<button data-act="newFood">Create food</button><button data-act="newRecipe">Create recipe</button><button data-act="newMeal">Create meal</button><button data-act="labelScanNew">Scan a label</button><button data-act="foodShot">Food from screenshot</button><button data-act="importShots">Import diary screenshot</button>`;
       document.body.appendChild(m); break; }
     case "dayMenu": if (document.querySelector(".menu")) closeMenu(); else dayMenu(a); break;
     case "copyPrev": {
@@ -3287,6 +3332,8 @@ document.addEventListener("click", async e => {
     case "microsAll": openMicros(); break;
     case "fillMicros": fillMicros(a); break;
     case "newFood": closeMenu(); openFoodForm(null, {}); break;
+    case "foodShot": closeMenu(); openShotFood(); break;
+    case "addFoodMenu": openAddFoodMenu(); break;
     case "foodOpen": { const f = getFood(a.dataset.id); if (!f) break; if (f.src === "builtin") openLinkedBuiltin(f); else if (f.src === "recipe") openRecipeEditor(f); else openFoodForm(f); break; }
     case "saveTargets": {
       const T = {}; for (const k of ["kcal","protein","net","fat","water"]){ const v = parseFloat($("#t-"+k).value); T[k] = v > 0 ? v : S.targets[k]; }
